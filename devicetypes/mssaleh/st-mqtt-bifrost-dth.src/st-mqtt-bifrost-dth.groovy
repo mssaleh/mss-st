@@ -2,7 +2,7 @@ import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 
 metadata {
-    definition (name: "MQTT Bridge", namespace: "mssaleh", author: "Mohammed Saleh") {
+    definition (name: "MQTT Bifrost", namespace: "mssaleh", author: "Mohammed Saleh") {
         capability "Notification"
     }
 
