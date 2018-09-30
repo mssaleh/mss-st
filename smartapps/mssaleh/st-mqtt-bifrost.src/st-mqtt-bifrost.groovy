@@ -1,3 +1,4 @@
+
 // source: https://raw.githubusercontent.com/stjohnjohnson/smartthings-mqtt-bridge/master/smartapps/stj/mqtt-bridge.src/mqtt-bridge.groovy
 
 import groovy.json.JsonSlurper
@@ -763,3 +764,4 @@ def actionTimedSession(device, attribute, value) {
         device.setTimeRemaining(value)
     }
 }
+
