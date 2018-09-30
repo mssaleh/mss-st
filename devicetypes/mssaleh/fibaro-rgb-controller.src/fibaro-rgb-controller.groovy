@@ -1,3 +1,4 @@
+
 // source: https://raw.githubusercontent.com/codersaur/SmartThings/master/devices/fibaro-rgbw-controller/fibaro-rgbw-controller.groovy
 
 metadata {
@@ -2098,3 +2099,4 @@ def test() {
 
     return delayBetween(cmds,200)
 }
+
