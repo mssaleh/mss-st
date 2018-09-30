@@ -2,7 +2,7 @@ import physicalgraph.zigbee.clusters.iaszone.ZoneStatus
 
 
 metadata {
-	definition(name: "Bosch Motion Detector with Delay", namespace: "mssaleh", author: "Mohammed Saleh", ocfDeviceType: "x.com.st.d.sensor.motion") {
+	definition(name: "Bosch Motion Detector", namespace: "mssaleh", author: "Mohammed Saleh", ocfDeviceType: "x.com.st.d.sensor.motion") {
 		capability "Motion Sensor"
 		capability "Configuration"
 		capability "Battery"
