@@ -4,6 +4,17 @@ import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 import groovy.transform.Field
 
+definition(
+    name: "ST MQTT Bifrost",
+    namespace: "mssaleh",
+    author: "Mohammed Saleh and John Johnson and Jeremiah Wuenschel",
+    description: "A bridge between SmartThings and MQTT",
+    category: "My Apps",
+    iconUrl: "https://s3.amazonaws.com/smartapp-icons/Connections/Cat-Connections.png",
+    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Connections/Cat-Connections@2x.png",
+    iconX3Url: "https://s3.amazonaws.com/smartapp-icons/Connections/Cat-Connections@3x.png"
+)
+
 // Massive lookup tree
 @Field CAPABILITY_MAP = [
     "accelerationSensors": [
@@ -409,17 +420,6 @@ import groovy.transform.Field
         action: "actionOpenClosed"
     ]
 ]
-
-definition(
-    name: "MQTT Bridge",
-    namespace: "mssaleh",
-    author: "Mohammed Saleh and John Johnson and Jeremiah Wuenschel",
-    description: "A bridge between SmartThings and MQTT",
-    category: "My Apps",
-    iconUrl: "https://s3.amazonaws.com/smartapp-icons/Connections/Cat-Connections.png",
-    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Connections/Cat-Connections@2x.png",
-    iconX3Url: "https://s3.amazonaws.com/smartapp-icons/Connections/Cat-Connections@3x.png"
-)
 
 preferences {
     section("Send Notifications?") {
