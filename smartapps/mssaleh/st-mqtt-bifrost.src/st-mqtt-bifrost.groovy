@@ -1,4 +1,5 @@
 // source: https://raw.githubusercontent.com/stjohnjohnson/smartthings-mqtt-bridge/master/smartapps/stj/mqtt-bridge.src/mqtt-bridge.groovy
+
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 import groovy.transform.Field
@@ -410,9 +411,9 @@ import groovy.transform.Field
 ]
 
 definition(
-    name: "ST-MQTT Bifrost",
-    namespace: "mssaleh",
-    author: "Mohammed Saleh. St. John Johnson and Jeremiah Wuenschel",
+    name: "MQTT Bridge",
+    namespace: "stj",
+    author: "St. John Johnson and Jeremiah Wuenschel",
     description: "A bridge between SmartThings and MQTT",
     category: "My Apps",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Connections/Cat-Connections.png",
