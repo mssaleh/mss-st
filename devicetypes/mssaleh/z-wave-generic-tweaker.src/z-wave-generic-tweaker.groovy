@@ -2711,3 +2711,4 @@ private getCommandClassNames() {
         0xF0: 'NON_INTEROPERABLE'
     ]
 }
+
