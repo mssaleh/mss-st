@@ -1,3 +1,4 @@
+
 metadata {
     definition (name: "NeoCoolcam Double Switch", namespace: "mssaleh", author: "Mohammed Saleh", vid: "generic-switch") {
         capability "Switch"
@@ -325,3 +326,4 @@ private void createChildDevices() {
 	    log.debug "Child creation failed for some reason: ${er}"
     }
 }
+
