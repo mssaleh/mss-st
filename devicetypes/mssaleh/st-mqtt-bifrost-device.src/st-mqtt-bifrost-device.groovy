@@ -1,9 +1,10 @@
 // source: https://raw.githubusercontent.com/stjohnjohnson/smartthings-mqtt-bridge/master/devicetypes/stj/mqtt-bridge.src/mqtt-bridge.groovy
+
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 
 metadata {
-    definition (name: "ST-MQTT Bifrost Device", namespace: "mssaleh", author: "Mohammed Saleh") {
+    definition (name: "MQTT Bridge", namespace: "mssaleh", author: "Mohammed Saleh") {
         capability "Notification"
     }
 
