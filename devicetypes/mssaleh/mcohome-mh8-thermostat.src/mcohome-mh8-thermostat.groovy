@@ -1,3 +1,4 @@
+
 metadata {
 	definition (name: "MCOHome MH8 Thermostat", namespace: "mssaleh", author: "Mohammed Saleh", ocfDeviceType: "oic.d.thermostat") {
 		capability "Actuator"
@@ -720,3 +721,4 @@ def getTempInDeviceScale(temp, scale) {
 def roundC (tempC) {
 	return (Math.round(tempC.toDouble() * 2))/2
 }
+
