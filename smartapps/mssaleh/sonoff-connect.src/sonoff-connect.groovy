@@ -1,3 +1,4 @@
+
 // https://raw.githubusercontent.com/erocm123/SmartThingsPublic/master/smartapps/erocm123/sonoff-connect.src/sonoff-connect.groovy
 
 definition(
@@ -393,3 +394,4 @@ private String convertPortToHex(port) {
 	String hexport = port.toString().format( '%04x', port.toInteger() )
     return hexport
 }
+
