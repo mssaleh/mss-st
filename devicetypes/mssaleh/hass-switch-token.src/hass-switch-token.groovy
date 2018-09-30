@@ -1,3 +1,4 @@
+
 preferences {
 	section("HASS Parameters"){
 		input "hass_ip", "text", title: "HA local IP", required: true
@@ -70,3 +71,4 @@ def off() {
 			log.debug "Executing OFF"
 			log.debug postRequest
 }
+
