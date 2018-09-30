@@ -409,9 +409,9 @@ import groovy.transform.Field
 ]
 
 definition(
-    name: "MQTT Bifrost",
+    name: "ST-MQTT Bifrost",
     namespace: "mssaleh",
-    author: "Mohammed Saleh and John Johnson and Jeremiah Wuenschel",
+    author: "Mohammed Saleh. St. John Johnson and Jeremiah Wuenschel",
     description: "A bridge between SmartThings and MQTT",
     category: "My Apps",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Connections/Cat-Connections.png",
