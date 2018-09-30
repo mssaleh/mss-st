@@ -5,7 +5,7 @@ import groovy.json.JsonOutput
 import groovy.transform.Field
 
 definition(
-    name: "ST MQTT Bifrost",
+    name: "ST-MQTT Bifrost",
     namespace: "mssaleh",
     author: "Mohammed Saleh and John Johnson and Jeremiah Wuenschel",
     description: "A bridge between SmartThings and MQTT",
