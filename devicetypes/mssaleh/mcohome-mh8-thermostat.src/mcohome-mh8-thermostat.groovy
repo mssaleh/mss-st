@@ -1,5 +1,5 @@
 metadata {
-	definition (name: "MCO Home MH8 Z-Wave Thermostat", namespace: "mssaleh", author: "Mohammed Saleh", ocfDeviceType: "oic.d.thermostat") {
+	definition (name: "MCOHome MH8 Thermostat", namespace: "mssaleh", author: "Mohammed Saleh", ocfDeviceType: "oic.d.thermostat") {
 		capability "Actuator"
 		capability "Temperature Measurement"
 		capability "Thermostat"
