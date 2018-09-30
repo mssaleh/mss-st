@@ -1,5 +1,5 @@
 metadata {
-    definition (name: "Aqara 2 Button Wired Wall Switch", namespace: "mssaleh", author: "Mohammed Saleh", vid: "generic-switch") {
+    definition (name: "Aqara Wired Double Switch", namespace: "mssaleh", author: "Mohammed Saleh", vid: "generic-switch") {
         capability "Actuator"
         capability "Configuration"
         capability "Refresh"
