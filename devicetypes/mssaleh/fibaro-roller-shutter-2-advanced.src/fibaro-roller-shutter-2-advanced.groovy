@@ -1,4 +1,6 @@
+
 // source: https://raw.githubusercontent.com/julienbachmann/smartthings/master/fibaro_fgr_222/fibaro_fgr_222.groovy
+
 metadata {
     definition (name: "Fibaro Roller Shutter 2 Advanced", namespace: "mssaleh", author: "Julien Bachmann") {
         capability "Sensor"
@@ -418,3 +420,4 @@ private getParamsMd() {
 
 ]
 }
+
