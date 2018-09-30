@@ -1,3 +1,4 @@
+// source: https://raw.githubusercontent.com/codersaur/SmartThings/master/devices/fibaro-rgbw-controller/fibaro-rgbw-controller.groovy
 metadata {
     definition (name: "Fibaro RGB Controller", namespace: "mssaleh", author: "David Lomas & Mohammed Saleh") {
         capability "Actuator"
