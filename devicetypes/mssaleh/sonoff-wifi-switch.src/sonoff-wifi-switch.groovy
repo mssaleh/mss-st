@@ -1,3 +1,5 @@
+// source: https://raw.githubusercontent.com/erocm123/SmartThingsPublic/master/devicetypes/erocm123/sonoff-wifi-switch.src/sonoff-wifi-switch.groovy
+
 import groovy.json.JsonSlurper
 import groovy.util.XmlSlurper
 
