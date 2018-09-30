@@ -2491,3 +2491,4 @@ private getAssocGroupsMd() {
          description : "Sends dim/brighten commands to associated devices when S2 is pressed (SWITCH_MULTILEVEL_SET)."]
     ]
 }
+
