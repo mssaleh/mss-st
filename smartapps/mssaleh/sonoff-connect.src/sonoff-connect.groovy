@@ -1,3 +1,5 @@
+// https://raw.githubusercontent.com/erocm123/SmartThingsPublic/master/smartapps/erocm123/sonoff-connect.src/sonoff-connect.groovy
+
 definition(
     name: "Sonoff Connect",
     namespace: "mssaleh",
@@ -335,6 +337,8 @@ def addDevices() {
                 deviceHandlerName = "Sonoff Dual Wifi Switch"
             else if (selectedDevice?.value?.name?.startsWith("Sonoff 4CH"))
                 deviceHandlerName = "Sonoff 4CH Wifi Switch"
+            else if (selectedDevice?.value?.name?.startsWith("Sonoff IFan02"))
+                deviceHandlerName = "Sonoff IFan02 Wifi Controller"
             else
                 deviceHandlerName = "Sonoff Wifi Switch"
             def newDevice = addChildDevice("erocm123", deviceHandlerName, selectedDevice.value.mac, selectedDevice?.value.hub, [
