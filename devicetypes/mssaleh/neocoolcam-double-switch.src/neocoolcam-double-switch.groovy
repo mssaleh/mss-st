@@ -1,5 +1,5 @@
 metadata {
-    definition (name: "Neo Coolcam Double Switch", namespace: "mssaleh", author: "Mohammed Saleh", vid: "generic-switch-power-energy") {
+    definition (name: "NeoCoolcam Double Switch", namespace: "mssaleh", author: "Mohammed Saleh", vid: "generic-switch-power-energy") {
         capability "Switch"
         capability "Relay Switch"
         capability "Polling"
