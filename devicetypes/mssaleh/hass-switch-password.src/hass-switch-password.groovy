@@ -8,7 +8,7 @@ preferences {
 }
 
 metadata {
-	definition (name: "HASS URI Switch Password", namespace: "mssaleh", author: "Mohammed Saleh", vid: "generic-switch") {
+	definition (name: "HASS Switch Password", namespace: "mssaleh", author: "Mohammed Saleh", vid: "generic-switch") {
 			capability "Switch"
 	}
 
