@@ -1,3 +1,4 @@
+// source: https://raw.githubusercontent.com/stjohnjohnson/smartthings-mqtt-bridge/master/devicetypes/stj/mqtt-bridge.src/mqtt-bridge.groovy
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 
