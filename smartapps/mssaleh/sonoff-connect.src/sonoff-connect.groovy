@@ -1,10 +1,25 @@
-
-// https://raw.githubusercontent.com/erocm123/SmartThingsPublic/master/smartapps/erocm123/sonoff-connect.src/sonoff-connect.groovy
+/**
+ *  Copyright 2016 Eric Maycock
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License. You may obtain a copy of the License at:
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing permissions and limitations under the License.
+ *
+ *  Sonoff (Connect)
+ *
+ *  Author: Eric Maycock (erocm123)
+ *  Date: 2016-06-02
+ */
 
 definition(
-    name: "Sonoff Connect",
+    name: "Sonoff (Connect)",
     namespace: "mssaleh",
-    author: "Eric Maycock",
+    author: "Eric Maycock (erocm123)",
     description: "Service Manager for Sonoff switches",
     category: "Convenience",
     iconUrl:   "https://raw.githubusercontent.com/erocm123/SmartThingsPublic/master/smartapps/erocm123/sonoff-connect.src/sonoff-connect-icon.png",
@@ -47,7 +62,7 @@ def configurePDevice(params){
          state.currentDeviceId = params.params.did
          state.currentDisplayName = getChildDevice(params.params.did)?.displayName
       }
-   }
+   }  
    if (getChildDevice(state.currentDeviceId) != null) getChildDevice(state.currentDeviceId).configure()
    dynamicPage(name: "configurePDevice", title: "Configure Sonoff Switches created with this app", nextPage: null) {
 		section {
@@ -66,7 +81,7 @@ def manuallyAdd(){
 		section {
 			paragraph "This process will manually create a Sonoff device based on the entered IP address. The SmartApp needs to then communicate with the device to obtain additional information from it. Make sure the device is on and connected to your wifi network."
             input "deviceType", "enum", title:"Device Type", description: "", required: false, options: ["Sonoff Wifi Switch","Sonoff TH Wifi Switch","Sonoff POW Wifi Switch","Sonoff Dual Wifi Switch","Sonoff 4CH Wifi Switch"]
-            input "ipAddress", "text", title:"IP Address", description: "", required: false
+            input "ipAddress", "text", title:"IP Address", description: "", required: false 
 		}
     }
 }
@@ -78,12 +93,12 @@ def manuallyAddConfirm(){
            "label": (deviceType ? deviceType : "Sonoff Wifi Switch") + " (${ipAddress})",
            "data": [
            "ip": ipAddress,
-           "port": "80"
+           "port": "80" 
            ]
        ])
-
+   
        app.updateSetting("ipAddress", "")
-
+            
        dynamicPage(name: "manuallyAddConfirm", title: "Manually add a Sonoff device", nextPage: "mainPage") {
 		   section {
 			   paragraph "The device has been added. Press next to return to the main page."
@@ -105,16 +120,16 @@ def deletePDevice(){
         dynamicPage(name: "deletePDevice", title: "Deletion Summary", nextPage: "mainPage") {
             section {
                 paragraph "The device has been deleted. Press next to continue"
-            }
+            } 
         }
-
+    
 	} catch (e) {
         dynamicPage(name: "deletePDevice", title: "Deletion Summary", nextPage: "mainPage") {
             section {
                 paragraph "Error: ${(e as String).split(":")[1]}."
-            }
+            } 
         }
-
+    
     }
 }
 
@@ -136,11 +151,11 @@ def discoveryPage(){
 def deviceDiscovery(params=[:])
 {
 	def devices = devicesDiscovered()
-
+    
 	int deviceRefreshCount = !state.deviceRefreshCount ? 0 : state.deviceRefreshCount as int
 	state.deviceRefreshCount = deviceRefreshCount + 1
 	def refreshInterval = 3
-
+    
 	def options = devices ?: []
 	def numFound = options.size() ?: 0
 
@@ -193,7 +208,7 @@ private discoverDevices() {
 }
 
 def configured() {
-
+	
 }
 
 def buttonConfigured(idx) {
@@ -204,7 +219,7 @@ def isConfigured(){
    if(getChildDevices().size() > 0) return true else return false
 }
 
-def isVirtualConfigured(did){
+def isVirtualConfigured(did){ 
     def foundDevice = false
     getChildDevices().each {
        if(it.deviceNetworkId != null){
@@ -256,9 +271,9 @@ def ssdpHandler(evt) {
     parsedEvent << ["hub":hub]
 
     def devices = getDevices()
-
+    
     String ssdpUSN = parsedEvent.ssdpUSN.toString()
-
+    
     if (devices."${ssdpUSN}") {
         def d = devices."${ssdpUSN}"
         def child = getChildDevice(parsedEvent.mac)
@@ -340,7 +355,7 @@ def addDevices() {
                 deviceHandlerName = "Sonoff 4CH Wifi Switch"
             else if (selectedDevice?.value?.name?.startsWith("Sonoff IFan02"))
                 deviceHandlerName = "Sonoff IFan02 Wifi Controller"
-            else
+            else 
                 deviceHandlerName = "Sonoff Wifi Switch"
             def newDevice = addChildDevice("erocm123", deviceHandlerName, selectedDevice.value.mac, selectedDevice?.value.hub, [
                 "label": selectedDevice?.value?.name ?: "Sonoff Wifi Switch",
@@ -352,8 +367,8 @@ def addDevices() {
             ])
             sectionText = sectionText + "Succesfully added Sonoff device with ip address ${convertHexToIP(selectedDevice.value.networkAddress)} \r\n"
         }
-
-	}
+        
+	} 
     log.debug sectionText
         return dynamicPage(name:"addDevices", title:"Devices Added", nextPage:"mainPage",  uninstall: true) {
         if(sectionText != ""){
@@ -385,7 +400,7 @@ private Integer convertHexToInt(hex) {
 	Integer.parseInt(hex,16)
 }
 
-private String convertIPtoHex(ipAddress) {
+private String convertIPtoHex(ipAddress) { 
     String hex = ipAddress.tokenize( '.' ).collect {  String.format( '%02x', it.toInteger() ) }.join()
     return hex
 }
@@ -394,4 +409,3 @@ private String convertPortToHex(port) {
 	String hexport = port.toString().format( '%04x', port.toInteger() )
     return hexport
 }
-
