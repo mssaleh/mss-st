@@ -12,14 +12,14 @@
  *
  *  Sonoff (Connect)
  *
- *  Author: Eric Maycock (erocm123)
+ *  Author: Eric Maycock
  *  Date: 2016-06-02
  */
 
 definition(
     name: "Sonoff (Connect)",
     namespace: "mssaleh",
-    author: "Eric Maycock (erocm123)",
+    author: "Eric Maycock",
     description: "Service Manager for Sonoff switches",
     category: "Convenience",
     iconUrl:   "https://raw.githubusercontent.com/erocm123/SmartThingsPublic/master/smartapps/erocm123/sonoff-connect.src/sonoff-connect-icon.png",
@@ -89,7 +89,7 @@ def manuallyAdd(){
 def manuallyAddConfirm(){
    if ( ipAddress =~ /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/) {
        log.debug "Creating Sonoff Wifi Switch with dni: ${convertIPtoHex(ipAddress)}:${convertPortToHex("80")}"
-       addChildDevice("erocm123", deviceType ? deviceType : "Sonoff Wifi Switch", "${convertIPtoHex(ipAddress)}:${convertPortToHex("80")}", location.hubs[0].id, [
+       addChildDevice("mssaleh", deviceType ? deviceType : "Sonoff Wifi Switch", "${convertIPtoHex(ipAddress)}:${convertPortToHex("80")}", location.hubs[0].id, [
            "label": (deviceType ? deviceType : "Sonoff Wifi Switch") + " (${ipAddress})",
            "data": [
            "ip": ipAddress,
@@ -357,7 +357,7 @@ def addDevices() {
                 deviceHandlerName = "Sonoff IFan02 Wifi Controller"
             else 
                 deviceHandlerName = "Sonoff Wifi Switch"
-            def newDevice = addChildDevice("erocm123", deviceHandlerName, selectedDevice.value.mac, selectedDevice?.value.hub, [
+            def newDevice = addChildDevice("mssaleh", deviceHandlerName, selectedDevice.value.mac, selectedDevice?.value.hub, [
                 "label": selectedDevice?.value?.name ?: "Sonoff Wifi Switch",
                 "data": [
                     "mac": selectedDevice.value.mac,
