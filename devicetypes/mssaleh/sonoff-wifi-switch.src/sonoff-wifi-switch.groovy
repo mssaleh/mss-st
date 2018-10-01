@@ -1,5 +1,21 @@
-// https://raw.githubusercontent.com/erocm123/SmartThingsPublic/master/devicetypes/erocm123/sonoff-wifi-switch.src/sonoff-wifi-switch.groovy
-
+/**
+ *  Copyright 2016 Eric Maycock
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License. You may obtain a copy of the License at:
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing permissions and limitations under the License.
+ *
+ *  Sonoff Wifi Switch
+ *
+ *  Author: Eric Maycock (erocm123)
+ *  Date: 2016-06-02
+ */
+ 
 import groovy.json.JsonSlurper
 import groovy.util.XmlSlurper
 
@@ -11,18 +27,21 @@ metadata {
 		capability "Sensor"
         capability "Configuration"
         capability "Health Check"
-
+        
         command "reboot"
-
+        
         attribute   "needUpdate", "string"
 	}
 
+	simulator {
+	}
+    
     preferences {
         input description: "Once you change values on this page, the corner of the \"configuration\" icon will change orange until all configuration parameters are updated.", title: "Settings", displayDuringSetup: false, type: "paragraph", element: "paragraph"
 		generate_preferences(configuration_model())
 	}
 
-	tiles (scale: 2){
+	tiles (scale: 2){      
 		multiAttributeTile(name:"switch", type: "generic", width: 6, height: 4, canChangeIcon: true){
 			tileAttribute ("device.switch", key: "PRIMARY_CONTROL") {
 				attributeState "on", label:'${name}', action:"switch.off", backgroundColor:"#00a0dc", icon: "st.switches.switch.on", nextState:"turningOff"
@@ -48,7 +67,7 @@ metadata {
         valueTile("uptime", "uptime", width: 2, height: 1) {
     		state "uptime", label:'Uptime ${currentValue}'
 		}
-
+        
     }
 
 	main(["switch"])
@@ -72,7 +91,7 @@ def configure() {
 def updated()
 {
     logging("updated()", 1)
-    def cmds = []
+    def cmds = [] 
     cmds = update_needed_settings()
     sendEvent(name: "checkInterval", value: 2 * 15 * 60 + 2 * 60, displayed: false, data: [protocol: "lan", hubHardwareId: device.hub.hardwareID])
     sendEvent(name:"needUpdate", value: device.currentValue("needUpdate"), displayed:false, isStateChange: true)
@@ -104,18 +123,18 @@ def parse(description) {
 		log.debug "Mac address of device found ${descMap["mac"]}"
         updateDataValue("mac", descMap["mac"])
 	}
-
+    
     if (state.mac != null && state.dni != state.mac) state.dni = setDeviceNetworkId(state.mac)
     if (descMap["body"]) body = new String(descMap["body"].decodeBase64())
 
     if (body && body != "") {
-
+    
     if(body.startsWith("{") || body.startsWith("[")) {
     def slurper = new JsonSlurper()
     def result = slurper.parseText(body)
-
+    
     log.debug "result: ${result}"
-
+    
     if (result.containsKey("type")) {
         if (result.type == "configuration")
             events << update_current_properties(result)
@@ -139,7 +158,7 @@ def parse(description) {
 def parseDescriptionAsMap(description) {
 	description.split(",").inject([:]) { map, param ->
 		def nameAndValue = param.split(":")
-
+        
         if (nameAndValue.length == 2) map += [(nameAndValue[0].trim()):nameAndValue[1].trim()]
         else map += [(nameAndValue[0].trim()):""]
 	}
@@ -171,13 +190,13 @@ def ping() {
     refresh()
 }
 
-private getAction(uri){
+private getAction(uri){ 
   updateDNI()
   def userpass
   //log.debug uri
-  if(password != null && password != "")
+  if(password != null && password != "") 
     userpass = encodeCredentials("admin", password)
-
+    
   def headers = getHeader(userpass)
 
   def hubAction = new physicalgraph.device.HubAction(
@@ -185,26 +204,26 @@ private getAction(uri){
     path: uri,
     headers: headers
   )
-  return hubAction
+  return hubAction    
 }
 
-private postAction(uri, data){
+private postAction(uri, data){ 
   updateDNI()
-
+  
   def userpass
-
-  if(password != null && password != "")
+  
+  if(password != null && password != "") 
     userpass = encodeCredentials("admin", password)
-
+  
   def headers = getHeader(userpass)
-
+  
   def hubAction = new physicalgraph.device.HubAction(
     method: "POST",
     path: uri,
     headers: headers,
     body: data
   )
-  return hubAction
+  return hubAction    
 }
 
 private setDeviceNetworkId(ip, port = null){
@@ -220,7 +239,7 @@ private setDeviceNetworkId(ip, port = null){
     return myDNI
 }
 
-private updateDNI() {
+private updateDNI() { 
     if (state.dni != null && state.dni != "" && device.deviceNetworkId != state.dni) {
        device.deviceNetworkId = state.dni
     }
@@ -237,7 +256,7 @@ private getHostAddress() {
     }
 }
 
-private String convertIPtoHex(ipAddress) {
+private String convertIPtoHex(ipAddress) { 
     String hex = ipAddress.tokenize( '.' ).collect {  String.format( '%02x', it.toInteger() ) }.join()
     return hex
 }
@@ -283,12 +302,12 @@ def sync(ip, port) {
 def generate_preferences(configuration_model)
 {
     def configuration = parseXml(configuration_model)
-
+   
     configuration.Value.each
     {
         if(it.@hidden != "true" && it.@disabled != "true"){
         switch(it.@type)
-        {
+        {   
             case ["number"]:
                 input "${it.@index}", "number",
                     title:"${it.@label}\n" + "${it.Help}",
@@ -354,15 +373,15 @@ def update_needed_settings()
 {
     def cmds = []
     def currentProperties = state.currentProperties ?: [:]
-
+     
     def configuration = parseXml(configuration_model())
     def isUpdateNeeded = "NO"
-
+    
     cmds << getAction("/configSet?name=haip&value=${device.hub.getDataValue("localIP")}")
     cmds << getAction("/configSet?name=haport&value=${device.hub.getDataValue("localSrvPortTCP")}")
-
+    
     configuration.Value.each
-    {
+    {     
         if ("${it.@setting_type}" == "lan" && it.@disabled != "true"){
             if (currentProperties."${it.@index}" == null)
             {
@@ -376,14 +395,14 @@ def update_needed_settings()
                }
             }
             else if ((settings."${it.@index}" != null || it.@hidden == "true") && currentProperties."${it.@index}" != (settings."${it.@index}"? settings."${it.@index}".toString() : "${it.@value}"))
-            {
+            { 
                 isUpdateNeeded = "YES"
                 logging("Setting ${it.@index} will be updated to ${settings."${it.@index}"}", 2)
                 cmds << getAction("/configSet?name=${it.@index}&value=${settings."${it.@index}"}")
-            }
+            } 
         }
     }
-
+    
     sendEvent(name:"needUpdate", value: isUpdateNeeded, displayed:false, isStateChange: true)
     return cmds
 }
@@ -429,4 +448,3 @@ Default: Momentary
 </configuration>
 '''
 }
-
