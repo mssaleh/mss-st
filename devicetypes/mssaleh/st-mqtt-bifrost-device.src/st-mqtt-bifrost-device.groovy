@@ -89,4 +89,3 @@ def deviceNotification(message) {
     )
     hubAction
 }
-
