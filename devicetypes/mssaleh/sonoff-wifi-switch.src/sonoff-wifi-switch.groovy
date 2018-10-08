@@ -37,21 +37,21 @@ metadata {
 		standardTile("refresh", "device.switch", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
 			state "default", label:"", action:"refresh.refresh", icon:"st.secondary.refresh"
 		}
-    standardTile("configure", "device.needUpdate", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
-        state "NO" , label:'', action:"configuration.configure", icon:"st.secondary.configure"
-        state "YES", label:'', action:"configuration.configure", icon:"st.secondary.configure"
-    }
-    standardTile("reboot", "device.reboot", decoration: "flat", height: 2, width: 2, inactiveLabel: false) {
-        state "default", label:"Reboot", action:"reboot", icon:"", backgroundColor:"#ffffff"
-    }
-    valueTile("ip", "ip", width: 2, height: 1) {
-		state "ip", label:'IP Address\r\n${currentValue}'
-		}
-    valueTile("uptime", "uptime", width: 2, height: 1) {
-    state "uptime", label:'Uptime ${currentValue}'
-		}
+    // standardTile("configure", "device.needUpdate", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
+    //     state "NO" , label:'', action:"configuration.configure", icon:"st.secondary.configure"
+    //     state "YES", label:'', action:"configuration.configure", icon:"st.secondary.configure"
+    // }
+    // standardTile("reboot", "device.reboot", decoration: "flat", height: 2, width: 2, inactiveLabel: false) {
+    //     state "default", label:"Reboot", action:"reboot", icon:"", backgroundColor:"#ffffff"
+    // }
+    // valueTile("ip", "ip", width: 2, height: 1) {
+		// state "ip", label:'IP Address\r\n${currentValue}'
+		// }
+    // valueTile("uptime", "uptime", width: 2, height: 1) {
+    // state "uptime", label:'Uptime ${currentValue}'
+		// }
 		main(["switch"])
-		details(["switch","refresh","configure","reboot","ip","uptime"])
+		details(["switch","refresh"]) // removed "configure","reboot","ip","uptime"
   }
 }
 
