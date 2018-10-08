@@ -14,7 +14,7 @@ metadata {
     command "reboot"
 
     attribute   "needUpdate", "string"
-	}
+		}
 
 	simulator {
 	}
@@ -31,8 +31,8 @@ tiles (scale: 2){
 		attributeState "off", label:'${name}', action:"switch.on", backgroundColor:"#ffffff", icon: "st.switches.switch.off", nextState:"turningOn"
 		attributeState "turningOn", label:'${name}', action:"switch.off", backgroundColor:"#00a0dc", icon: "st.switches.switch.off", nextState:"turningOff"
 		attributeState "turningOff", label:'${name}', action:"switch.on", backgroundColor:"#ffffff", icon: "st.switches.switch.on", nextState:"turningOn"
-		}
-    	}
+			}
+    }
 
 	standardTile("refresh", "device.switch", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
 		state "default", label:"", action:"refresh.refresh", icon:"st.secondary.refresh"
@@ -67,8 +67,7 @@ def configure() {
     if (cmds != []) cmds
 }
 
-def updated()
-{
+def updated() {
     logging("updated()", 1)
     def cmds = []
     cmds = update_needed_settings()
@@ -436,4 +435,3 @@ Default: Momentary
 </configuration>
 '''
 }
-
