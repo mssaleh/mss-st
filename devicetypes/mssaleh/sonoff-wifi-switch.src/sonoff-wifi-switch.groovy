@@ -9,7 +9,7 @@ metadata {
 		capability "Sensor"
     capability "Configuration"
     capability "Health Check"
-		capability "Light"
+		capability "Polling"
 
     command "reboot"
 
@@ -19,8 +19,8 @@ metadata {
 	simulator {
 	}
 
-    preferences {
-        input description: "Once you change values on this page, the corner of the \"configuration\" icon will change orange until all configuration parameters are updated.", title: "Settings", displayDuringSetup: false, type: "paragraph", element: "paragraph"
+  preferences {
+    input description: "Once you change values on this page, the corner of the configuration icon will change orange until all configuration parameters are updated.", title: "Settings", displayDuringSetup: false, type: "paragraph", element: "paragraph"
 		generate_preferences(configuration_model())
 	}
 
@@ -39,7 +39,7 @@ metadata {
 		}
     standardTile("configure", "device.needUpdate", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
         state "NO" , label:'', action:"configuration.configure", icon:"st.secondary.configure"
-        state "YES", label:'', action:"configuration.configure", icon:"https://github.com/erocm123/SmartThingsPublic/raw/master/devicetypes/erocm123/qubino-flush-1d-relay.src/configure@2x.png"
+        state "YES", label:'', action:"configuration.configure", icon:"st.secondary.configure"
     }
     standardTile("reboot", "device.reboot", decoration: "flat", height: 2, width: 2, inactiveLabel: false) {
         state "default", label:"Reboot", action:"reboot", icon:"", backgroundColor:"#ffffff"
