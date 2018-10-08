@@ -2,7 +2,7 @@ import groovy.json.JsonSlurper
 import groovy.util.XmlSlurper
 
 metadata {
-	definition (name: "Sonoff Wifi Switch", namespace: "mssaleh", author: "Eric Maycock", ocfDeviceType: "oic.d.switch", vid: "generic-switch") {
+	definition (name: "Sonoff Wifi Switch", namespace: "mssaleh", author: "Eric Maycock and Mohammed Saleh", ocfDeviceType: "oic.d.switch", vid: "generic-switch") {
 		capability "Actuator"
 		capability "Switch"
 		capability "Refresh"
@@ -21,22 +21,22 @@ metadata {
 
   preferences {
     input description: "Once you change values on this page, the corner of the configuration icon will change orange until all configuration parameters are updated.", title: "Settings", displayDuringSetup: false, type: "paragraph", element: "paragraph"
-		generate_preferences(configuration_model())
+	generate_preferences(configuration_model())
 	}
 
-	tiles (scale: 2){
-		multiAttributeTile(name:"switch", type: "generic", width: 6, height: 4, canChangeIcon: true){
-			tileAttribute ("device.switch", key: "PRIMARY_CONTROL") {
-				attributeState "on", label:'${name}', action:"switch.off", backgroundColor:"#00a0dc", icon: "st.switches.switch.on", nextState:"turningOff"
-				attributeState "off", label:'${name}', action:"switch.on", backgroundColor:"#ffffff", icon: "st.switches.switch.off", nextState:"turningOn"
-				attributeState "turningOn", label:'${name}', action:"switch.off", backgroundColor:"#00a0dc", icon: "st.switches.switch.off", nextState:"turningOff"
-				attributeState "turningOff", label:'${name}', action:"switch.on", backgroundColor:"#ffffff", icon: "st.switches.switch.on", nextState:"turningOn"
-			}
-    }
-
-		standardTile("refresh", "device.switch", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
-			state "default", label:"", action:"refresh.refresh", icon:"st.secondary.refresh"
+tiles (scale: 2){
+	multiAttributeTile(name:"switch", type: "generic", width: 6, height: 4, canChangeIcon: true){
+		tileAttribute ("device.switch", key: "PRIMARY_CONTROL") {
+		attributeState "on", label:'${name}', action:"switch.off", backgroundColor:"#00a0dc", icon: "st.switches.switch.on", nextState:"turningOff"
+		attributeState "off", label:'${name}', action:"switch.on", backgroundColor:"#ffffff", icon: "st.switches.switch.off", nextState:"turningOn"
+		attributeState "turningOn", label:'${name}', action:"switch.off", backgroundColor:"#00a0dc", icon: "st.switches.switch.off", nextState:"turningOff"
+		attributeState "turningOff", label:'${name}', action:"switch.on", backgroundColor:"#ffffff", icon: "st.switches.switch.on", nextState:"turningOn"
 		}
+    	}
+
+	standardTile("refresh", "device.switch", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
+		state "default", label:"", action:"refresh.refresh", icon:"st.secondary.refresh"
+	}
     // standardTile("configure", "device.needUpdate", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
     //     state "NO" , label:'', action:"configuration.configure", icon:"st.secondary.configure"
     //     state "YES", label:'', action:"configuration.configure", icon:"st.secondary.configure"
@@ -44,14 +44,14 @@ metadata {
     // standardTile("reboot", "device.reboot", decoration: "flat", height: 2, width: 2, inactiveLabel: false) {
     //     state "default", label:"Reboot", action:"reboot", icon:"", backgroundColor:"#ffffff"
     // }
-    // valueTile("ip", "ip", width: 2, height: 1) {
-		// state "ip", label:'IP Address\r\n${currentValue}'
-		// }
     // valueTile("uptime", "uptime", width: 2, height: 1) {
     // state "uptime", label:'Uptime ${currentValue}'
 		// }
-		main(["switch"])
-		details(["switch","refresh"]) // removed "configure","reboot","ip","uptime"
+     	valueTile("ip", "ip", width: 2, height: 1) {
+		state "ip", label:'IP Address\r\n${currentValue}'
+	}
+	main(["switch"])
+	details(["switch","refresh","ip"]) // removed "configure","reboot","uptime"
   }
 }
 
@@ -436,3 +436,4 @@ Default: Momentary
 </configuration>
 '''
 }
+
