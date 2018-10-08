@@ -44,14 +44,14 @@ metadata {
     standardTile("reboot", "device.reboot", decoration: "flat", height: 2, width: 2, inactiveLabel: false) {
         state "default", label:"Reboot", action:"reboot", icon:"", backgroundColor:"#ffffff"
     }
-    // valueTile("ip", "ip", width: 2, height: 1) {
-		// state "ip", label:'IP Address\r\n${currentValue}'
-		// }
-    // valueTile("uptime", "uptime", width: 2, height: 1) {
-    // state "uptime", label:'Uptime ${currentValue}'
-		// }
+    valueTile("ip", "ip", width: 2, height: 1) {
+		state "ip", label:'IP Address\r\n${currentValue}'
+		}
+    valueTile("uptime", "uptime", width: 2, height: 1) {
+    state "uptime", label:'Uptime ${currentValue}'
+		}
 		main(["switch"])
-		details(["switch","refresh","configure","reboot"])  // removed ,"ip","uptime"
+		details(["switch","refresh","configure","reboot","ip","uptime"])
   }
 }
 
@@ -159,6 +159,14 @@ def off() {
 
 def refresh() {
 	log.debug "refresh()"
+    def cmds = []
+    cmds << getAction("/status")
+    return cmds
+}
+
+
+def poll() {
+	log.debug "poll()"
     def cmds = []
     cmds << getAction("/status")
     return cmds
