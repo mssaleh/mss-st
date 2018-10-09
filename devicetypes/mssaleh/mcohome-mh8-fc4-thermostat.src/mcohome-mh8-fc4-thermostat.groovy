@@ -53,14 +53,17 @@ metadata {
 			state "off", action:"switchMode", nextState:"...", icon: "st.thermostat.heating-cooling-off"
 			state "heat", action:"switchMode", nextState:"...", icon: "st.thermostat.heat"
 			state "cool", action:"switchMode", nextState:"...", icon: "st.thermostat.cool"
-			state "auto", action:"switchMode", nextState:"...", icon: "st.thermostat.auto"
-			state "emergency heat", action:"switchMode", nextState:"...", icon: "st.thermostat.emergency-heat"
+			state "fan only", action:"switchMode", nextState:"...", icon: "st.thermostat.fan-circulate"
+			// state "emergency heat", action:"switchMode", nextState:"...", icon: "st.thermostat.emergency-heat"
 			state "...", label: "Updating...",nextState:"...", backgroundColor:"#ffffff"
 		}
 		standardTile("fanMode", "device.thermostatFanMode", width:2, height:2, inactiveLabel: false, decoration: "flat") {
 			state "auto", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-auto"
-			state "on", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
-			state "circulate", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-circulate"
+			// state "on", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
+			state "low", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
+			state "medium", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
+			state "high", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
+			// state "circulate", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-circulate"
 			state "...", label: "Updating...", nextState:"...", backgroundColor:"#ffffff"
 		}
 		standardTile("lowerHeatingSetpoint", "device.heatingSetpoint", width:2, height:1, inactiveLabel: false, decoration: "flat") {
@@ -88,9 +91,7 @@ metadata {
 			state "default", action:"refresh.refresh", icon:"st.secondary.refresh"
 		}
 		main "temperature"
-		details(["temperature", "lowerCoolSetpoint",
-				"coolingSetpoint", "raiseCoolSetpoint", "mode", "fanMode", "thermostatOperatingState", "refresh"])
-  // removed "lowerHeatingSetpoint", "heatingSetpoint", "raiseHeatingSetpoint",
+		details(["temperature", "lowerCoolSetpoint", "coolingSetpoint", "raiseCoolSetpoint", "lowerHeatingSetpoint", "heatingSetpoint", "raiseHeatingSetpoint", "mode", "fanMode", "thermostatOperatingState", "refresh"])
 	}
 }
 
@@ -582,8 +583,21 @@ def getModeMap() { [
 	"off": 0,
 	"heat": 1,
 	"cool": 2,
-	"auto": 3,
-	// "emergency heat": 4
+	"fan only": 6,
+	// 0=Off
+	// 1=Heat
+	// 2=Cool
+	// 3=Auto
+	// 4=Aux Heat
+	// 5=Resume
+	// 6=Fan Only
+	// 7=Furnace
+	// 8=Dry Air
+	// 9=Moist Air
+	// 10=Auto Changeover
+	// 11=Heat Eco
+	// 12=Cool Eco
+	// 13=Away
 ]}
 
 def setThermostatMode(String value) {
@@ -605,6 +619,14 @@ def getFanModeMap() { [
 		// "auto": 0,
 		// "on": 1,
 		// "circulate": 6
+		// -=Uninitialized
+		// 0=Auto
+		// 1=On
+		// 2=Two
+		// 3=Three
+		// 4=Four
+		// 5=Five
+		// 6=Six
 ]}
 
 def setThermostatFanMode(String value) {
@@ -625,10 +647,9 @@ def heat() {
 	switchToMode("heat")
 }
 
-def emergencyHeat() {
-	// switchToMode("emergency heat")
-	switchToMode("heat")
-}
+// def emergencyHeat() {
+// 	switchToMode("emergency heat")
+// }
 
 def cool() {
 	switchToMode("cool")
@@ -659,9 +680,9 @@ def fanHigh() {
 	switchToFanMode("high")
 }
 
-def fanCirculate() {
-	switchToFanMode("medium")
-}
+// def fanCirculate() {
+// 	switchToFanMode("medium")
+// }
 
 // Get stored temperature from currentState in current local scale
 def getTempInLocalScale(state) {
