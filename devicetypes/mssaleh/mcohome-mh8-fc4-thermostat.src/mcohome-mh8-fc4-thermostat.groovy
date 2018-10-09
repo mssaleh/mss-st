@@ -1,7 +1,7 @@
 import physicalgraph.zwave.commands.*
 
 metadata {
-	definition (name: "MCOHome MH8 Thermostat", namespace: "mssaleh", author: "Mohammed Saleh", ocfDeviceType: "oic.d.thermostat") {
+	definition (name: "MCOHome MH8-FC4 Thermostat", namespace: "mssaleh", author: "Mohammed Saleh", ocfDeviceType: "oic.d.thermostat") {
 		capability "Actuator"
 		capability "Temperature Measurement"
 		capability "Thermostat"
