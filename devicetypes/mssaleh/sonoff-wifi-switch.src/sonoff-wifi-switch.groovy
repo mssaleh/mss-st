@@ -405,7 +405,6 @@ def configuration_model()
 </Value>
 <Value type="list" byteSize="1" index="pos" label="Boot Up State" min="0" max="2" value="0" setting_type="lan" fw="">
 <Help>
-Default: Off
 </Help>
     <Item label="Off" value="0" />
     <Item label="On" value="1" />
@@ -415,14 +414,12 @@ Default: Off
 <Help>
 Automatically turn the switch off after this many seconds.
 Range: 0 to 65536
-Default: 0 (Disabled)
 </Help>
 
 </Value>
 <Value type="list" byteSize="1" index="switchtype" label="External Switch Type" min="0" max="1" value="0" setting_type="lan" fw="">
 <Help>
 If a switch is attached to GPIO 14.
-Default: Momentary
 </Help>
     <Item label="Momentary" value="0" />
     <Item label="Toggle" value="1" />
