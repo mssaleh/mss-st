@@ -1543,7 +1543,7 @@ private zwaveEndPointEvent(sourceEndPoint, value) {
         }
 
         // If channel maps to a color, update hue, saturation, and color attributes:
-        if (isColor) {
+        if (isColor != null) {
             def colorMap
             switch (mapping) {
                 case "Red":
@@ -1805,14 +1805,14 @@ private hsvToRGBW(Map colorMap) {
         while (h >= 1) h -= 1
         float s = colorMap.saturation / 100
         float v = colorMap.level * 255 / 100
-
+    if (h != null) {
         int d = Math.floor(h * 6)
         float f = (h * 6) - d
         int n = Math.round(v)
         int p = Math.round(v * (1 - s))
         int q = Math.round(v * (1 - f * s))
         int t = Math.round(v * (1 - (1 - f) * s))
-
+      }
         switch (d % 6) {
           case 0: return colorMap << [ red: n, green: t, blue: p, white: [n,t,p].min() ]
           case 1: return colorMap << [ red: q, green: n, blue: p, white: [q,n,p].min() ]
@@ -1820,7 +1820,7 @@ private hsvToRGBW(Map colorMap) {
           case 3: return colorMap << [ red: p, green: q, blue: n, white: [p,q,n].min() ]
           case 4: return colorMap << [ red: t, green: p, blue: n, white: [t,p,n].min() ]
           case 5: return colorMap << [ red: n, green: p, blue: q, white: [n,p,q].min() ]
-        }
+      }
     }
     else {
         log.error "${device.displayName}: hsvToRGBW(): Cannot obtain color information from colorMap: ${colorMap}"
@@ -2099,4 +2099,3 @@ def test() {
 
     return delayBetween(cmds,200)
 }
-
