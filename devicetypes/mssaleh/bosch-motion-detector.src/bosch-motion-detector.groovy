@@ -260,4 +260,3 @@ def configure() {
 	// battery minReport 30 seconds, maxReportTime 6 hrs by default
 	return refresh() + zigbee.batteryConfig() + zigbee.temperatureConfig(30, 300) // send refresh cmds as part of config
 }
-
