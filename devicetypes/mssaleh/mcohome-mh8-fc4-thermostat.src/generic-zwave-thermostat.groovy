@@ -1,7 +1,5 @@
-import physicalgraph.zwave.commands.*
-
 metadata {
-	definition (name: "MCOHome MH8-FC4 Thermostat", namespace: "mssaleh", author: "Mohammed Saleh", ocfDeviceType: "oic.d.thermostat") {
+	definition (name: "Z-Wave Thermostat", namespace: "smartthings", author: "SmartThings") {
 		capability "Actuator"
 		capability "Temperature Measurement"
 		capability "Thermostat"
@@ -18,12 +16,10 @@ metadata {
 		command "lowerCoolSetpoint"
 		command "raiseCoolSetpoint"
 		command "poll"
-		command "off"
 
-
-		fingerprint deviceId: "0x08" // from the device itself: "0x0806"
-		fingerprint inClusters: "0x43,0x40,0x45,0x44,0x42,0x31,0x85,0x72,0x86"
-		fingerprint mfr:"015F", prod:"0802", model:"3102", deviceJoinName: "MCOHome MH8 Z-Wave Thermostat"
+		fingerprint deviceId: "0x08"
+		fingerprint inClusters: "0x43,0x40,0x44,0x31"
+		fingerprint mfr:"0039", prod:"0011", model:"0001", deviceJoinName: "Honeywell Z-Wave Thermostat"
 	}
 
 	tiles {
@@ -32,13 +28,13 @@ metadata {
 				attributeState("temperature", label:'${currentValue}°', icon: "st.alarm.temperature.normal",
 					backgroundColors:[
 							// Celsius
-							[value: 10, color: "#153591"],
-							[value: 15, color: "#1e9cbb"],
-							[value: 20, color: "#90d2a7"],
-							[value: 25, color: "#44b621"],
-							[value: 30, color: "#f1d801"],
+							[value: 0, color: "#153591"],
+							[value: 7, color: "#1e9cbb"],
+							[value: 15, color: "#90d2a7"],
+							[value: 23, color: "#44b621"],
+							[value: 28, color: "#f1d801"],
 							[value: 35, color: "#d04e00"],
-							[value: 40, color: "#bc2323"],
+							[value: 37, color: "#bc2323"],
 							// Fahrenheit
 							[value: 40, color: "#153591"],
 							[value: 44, color: "#1e9cbb"],
@@ -55,17 +51,14 @@ metadata {
 			state "off", action:"switchMode", nextState:"...", icon: "st.thermostat.heating-cooling-off"
 			state "heat", action:"switchMode", nextState:"...", icon: "st.thermostat.heat"
 			state "cool", action:"switchMode", nextState:"...", icon: "st.thermostat.cool"
-			state "fan only", action:"switchMode", nextState:"...", icon: "st.thermostat.fan-circulate"
-			// state "emergency heat", action:"switchMode", nextState:"...", icon: "st.thermostat.emergency-heat"
+			state "auto", action:"switchMode", nextState:"...", icon: "st.thermostat.auto"
+			state "emergency heat", action:"switchMode", nextState:"...", icon: "st.thermostat.emergency-heat"
 			state "...", label: "Updating...",nextState:"...", backgroundColor:"#ffffff"
 		}
 		standardTile("fanMode", "device.thermostatFanMode", width:2, height:2, inactiveLabel: false, decoration: "flat") {
-			// state "on", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
-			state "low", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
-			state "medium", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
-			state "high", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
-			state "fanAuto", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-auto"
-			// state "circulate", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-circulate"
+			state "auto", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-auto"
+			state "on", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
+			state "circulate", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-circulate"
 			state "...", label: "Updating...", nextState:"...", backgroundColor:"#ffffff"
 		}
 		standardTile("lowerHeatingSetpoint", "device.heatingSetpoint", width:2, height:1, inactiveLabel: false, decoration: "flat") {
@@ -93,7 +86,8 @@ metadata {
 			state "default", action:"refresh.refresh", icon:"st.secondary.refresh"
 		}
 		main "temperature"
-		details(["temperature", "lowerCoolSetpoint", "coolingSetpoint", "raiseCoolSetpoint", "lowerHeatingSetpoint", "heatingSetpoint", "raiseHeatingSetpoint", "mode", "fanMode", "thermostatOperatingState", "refresh"])
+		details(["temperature", "lowerHeatingSetpoint", "heatingSetpoint", "raiseHeatingSetpoint", "lowerCoolSetpoint",
+				"coolingSetpoint", "raiseCoolSetpoint", "mode", "fanMode", "thermostatOperatingState", "refresh"])
 	}
 }
 
@@ -119,70 +113,28 @@ def initialize() {
 	// Device-Watch simply pings if no device events received for 32min(checkInterval)
 	sendEvent(name: "checkInterval", value: 2 * 15 * 60 + 2 * 60, displayed: false, data: [protocol: "zwave", hubHardwareId: device.hub.hardwareID])
 	unschedule()
-	runEvery5Minutes("poll")  // This is not necessary for Honeywell Z-wave, but could be for other Z-wave thermostats
+	if (getDataValue("manufacturer") != "Honeywell") {
+		runEvery5Minutes("poll")  // This is not necessary for Honeywell Z-wave, but could be for other Z-wave thermostats
+	}
 	pollDevice()
 }
 
-// def parse(String description)
-// {
-// 	def result = null
-// 	if (description == "updated") {
-// 	} else {
-// 		def zwcmd = zwave.parse(description, [0x42:1, 0x43:2, 0x31: 3])
-// 		if (zwcmd) {
-// 			result = zwaveEvent(zwcmd)
-// 		} else {
-// 			log.debug "$device.displayName couldn't parse $description"
-// 		}
-// 	}
-// 	if (!result) {
-// 		return []
-// 	}
-// 	return [result]
-// 	log.debug "description: $result"
-// }
-
 def parse(String description)
 {
-	def map = createEvent(zwaveEvent(zwave.parse(description, [0x42:1, 0x43:2, 0x31: 3])))
-	if (!map) {
-		return null
+	def result = null
+	if (description == "updated") {
+	} else {
+		def zwcmd = zwave.parse(description, [0x42:1, 0x43:2, 0x31: 3])
+		if (zwcmd) {
+			result = zwaveEvent(zwcmd)
+		} else {
+			log.debug "$device.displayName couldn't parse $description"
+		}
 	}
-
-	def result = [map]
-	if (map.isStateChange && map.name in ["heatingSetpoint","coolingSetpoint","thermostatMode"]) {
-		def map2 = [
-			name: "thermostatSetpoint",
-			unit: getTemperatureScale()
-		]
-		if (map.name == "thermostatMode") {
-			state.lastTriedMode = map.value
-			if (map.value == "cool") {
-				map2.value = device.latestValue("coolingSetpoint")
-				log.info "THERMOSTAT, latest cooling setpoint = ${map2.value}"
-			}
-			else {
-				map2.value = device.latestValue("heatingSetpoint")
-				log.info "THERMOSTAT, latest heating setpoint = ${map2.value}"
-			}
-		}
-		else {
-			def mode = device.latestValue("thermostatMode")
-			log.info "THERMOSTAT, latest mode = ${mode}"
-			if ((map.name == "heatingSetpoint" && mode == "heat") || (map.name == "coolingSetpoint" && mode == "cool")) {
-				map2.value = map.value
-				map2.unit = map.unit
-			}
-		}
-		if (map2.value != null) {
-			log.debug "THERMOSTAT, adding setpoint event: $map"
-			result << createEvent(map2)
-		}
-	} else if (map.name == "thermostatFanMode" && map.isStateChange) {
-		state.lastTriedFanMode = map.value
+	if (!result) {
+		return []
 	}
-	log.debug "Parse returned $result"
-	result
+	return [result]
 }
 
 // Event Generation
@@ -260,20 +212,14 @@ def zwaveEvent(physicalgraph.zwave.commands.thermostatfanstatev1.ThermostatFanSt
 	def map = [name: "thermostatFanState", unit: ""]
 	switch (cmd.fanOperatingState) {
 		case 0:
-			map.value = "idle" // maybe "auto"
+			map.value = "idle"
 			break
 		case 1:
-			map.value = "low" // "running"
+			map.value = "running"
 			break
-    case 5:
-			map.value = "medium"
+		case 2:
+			map.value = "running high"
 			break
-    case 2: // maybe 3
-			map.value = "high"
-			break
-		// case 2:
-		// 	map.value = "running high"
-		// 	break
 	}
 	sendEvent(map)
 }
@@ -287,9 +233,9 @@ def zwaveEvent(physicalgraph.zwave.commands.thermostatmodev2.ThermostatModeRepor
 		case physicalgraph.zwave.commands.thermostatmodev2.ThermostatModeReport.MODE_HEAT:
 			map.value = "heat"
 			break
-		// case physicalgraph.zwave.commands.thermostatmodev2.ThermostatModeReport.MODE_AUXILIARY_HEAT:
-		// 	map.value = "emergency heat"
-		// 	break
+		case physicalgraph.zwave.commands.thermostatmodev2.ThermostatModeReport.MODE_AUXILIARY_HEAT:
+			map.value = "emergency heat"
+			break
 		case physicalgraph.zwave.commands.thermostatmodev2.ThermostatModeReport.MODE_COOL:
 			map.value = "cool"
 			break
@@ -305,23 +251,14 @@ def zwaveEvent(physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanMod
 	def map = [name: "thermostatFanMode", data:[supportedThermostatFanModes: state.supportedFanModes]]
 	switch (cmd.fanMode) {
 		case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_AUTO_LOW:
-			map.value = "fanAuto"
+			map.value = "auto"
 			break
-		case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_AUTO:
-			map.value = "fanAuto"
+		case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_LOW:
+			map.value = "on"
 			break
-    case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_LOW:
-			map.value = "low"
+		case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_CIRCULATION:
+			map.value = "circulate"
 			break
-		case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_MEDIUM:
-			map.value = "medium"
-			break
-		case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_HIGH:
-			map.value = "high"
-			break
-		// case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_CIRCULATION:
-		// 	map.value = "low" // "circulate"
-		// 	break
 	}
 	sendEvent(map)
 }
@@ -332,7 +269,7 @@ def zwaveEvent(physicalgraph.zwave.commands.thermostatmodev2.ThermostatModeSuppo
 	if(cmd.heat) { supportedModes << "heat" }
 	if(cmd.cool) { supportedModes << "cool" }
 	if(cmd.auto) { supportedModes << "auto" }
-	// if(cmd.auxiliaryemergencyHeat) { supportedModes << "emergency heat" }
+	if(cmd.auxiliaryemergencyHeat) { supportedModes << "emergency heat" }
 
 	state.supportedModes = supportedModes
 	sendEvent(name: "supportedThermostatModes", value: supportedModes, displayed: false)
@@ -340,11 +277,9 @@ def zwaveEvent(physicalgraph.zwave.commands.thermostatmodev2.ThermostatModeSuppo
 
 def zwaveEvent(physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeSupportedReport cmd) {
 	def supportedFanModes = []
-	if(cmd.fanAuto) { supportedFanModes << "fanAuto" }
-	// if(cmd.circulation) { supportedFanModes << "low" }
-	if(cmd.low) { supportedFanModes << "low" }
-  if(cmd.medium) { supportedFanModes << "medium" }
-  if(cmd.high) { supportedFanModes << "high" }
+	if(cmd.auto) { supportedFanModes << "auto" }
+	if(cmd.circulation) { supportedFanModes << "circulate" }
+	if(cmd.low) { supportedFanModes << "on" }
 
 	state.supportedFanModes = supportedFanModes
 	sendEvent(name: "supportedThermostatFanModes", value: supportedFanModes, displayed: false)
@@ -534,9 +469,9 @@ def updateThermostatSetpoint(setpoint, value) {
 	def heatingSetpoint = (setpoint == "heatingSetpoint") ? value : getTempInLocalScale("heatingSetpoint")
 	def coolingSetpoint = (setpoint == "coolingSetpoint") ? value : getTempInLocalScale("coolingSetpoint")
 	def mode = device.currentValue("thermostatMode")
-	def thermostatSetpoint = coolingSetpoint    // corresponds to (mode == "cool")
-	if (mode == "heat") {
-		thermostatSetpoint = heatingSetpoint
+	def thermostatSetpoint = heatingSetpoint    // corresponds to (mode == "heat" || mode == "emergency heat")
+	if (mode == "cool") {
+		thermostatSetpoint = coolingSetpoint
 	} else if (mode == "auto" || mode == "off") {
 		// Set thermostatSetpoint to the setpoint closest to the current temperature
 		def currentTemperature = getTempInLocalScale("temperature")
@@ -629,21 +564,8 @@ def getModeMap() { [
 	"off": 0,
 	"heat": 1,
 	"cool": 2,
-	"fan only": 6,
-	// 0=Off
-	// 1=Heat
-	// 2=Cool
-	// 3=Auto
-	// 4=Aux Heat
-	// 5=Resume
-	// 6=Fan Only
-	// 7=Furnace
-	// 8=Dry Air
-	// 9=Moist Air
-	// 10=Auto Changeover
-	// 11=Heat Eco
-	// 12=Cool Eco
-	// 13=Away
+	"auto": 3,
+	"emergency heat": 4
 ]}
 
 def setThermostatMode(String value) {
@@ -657,22 +579,9 @@ def setGetThermostatMode(data) {
 }
 
 def getFanModeMap() { [
-		"fanAuto": 0,
-		"low": 1,
-    "medium": 5,
-    "high": 3 // needs verification
-    // "circulate": 6
-		// "fanAuto": 0,
-		// "on": 1,
-		// "circulate": 6
-		// -=Uninitialized
-		// 0=Auto
-		// 1=On
-		// 2=Two
-		// 3=Three
-		// 4=Four
-		// 5=Five
-		// 6=Six
+	"auto": 0,
+	"on": 1,
+	"circulate": 6
 ]}
 
 def setThermostatFanMode(String value) {
@@ -693,9 +602,9 @@ def heat() {
 	switchToMode("heat")
 }
 
-// def emergencyHeat() {
-// 	switchToMode("emergency heat")
-// }
+def emergencyHeat() {
+	switchToMode("emergency heat")
+}
 
 def cool() {
 	switchToMode("cool")
@@ -706,29 +615,16 @@ def auto() {
 }
 
 def fanOn() {
-	// switchToFanMode("on")
-	switchToFanMode("auto")
+	switchToFanMode("on")
 }
 
 def fanAuto() {
-	switchToFanMode("fanAuto")
+	switchToFanMode("auto")
 }
 
-def fanLow() {
-	switchToFanMode("low")
+def fanCirculate() {
+	switchToFanMode("circulate")
 }
-
-def fanMedium() {
-	switchToFanMode("medium")
-}
-
-def fanHigh() {
-	switchToFanMode("high")
-}
-
-// def fanCirculate() {
-// 	switchToFanMode("medium")
-// }
 
 // Get stored temperature from currentState in current local scale
 def getTempInLocalScale(state) {
