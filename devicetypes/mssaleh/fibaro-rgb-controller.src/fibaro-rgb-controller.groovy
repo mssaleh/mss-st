@@ -1799,29 +1799,27 @@ private hex(value, width=2) {
 private hsvToRGBW(Map colorMap) {
     if (state.debug) log.trace "${device.displayName}: hsvToRGBW(): Translating colorMap: ${colorMap}"
 
-    if (colorMap != null & colorMap.containsKey("hue") & colorMap.containsKey("saturation") & colorMap.containsKey("level")) {
+    if (colorMap.containsKey("hue") & colorMap.containsKey("saturation") & colorMap.containsKey("level")) {
         float h = colorMap.hue / 100
         while (h >= 1) h -= 1
         float s = colorMap.saturation / 100
         float v = colorMap.level * 255 / 100
-    if (h != null) {
-        int d = Math.floor(h * 6)
+
+        int d = (int) h * 6
         float f = (h * 6) - d
         int n = Math.round(v)
         int p = Math.round(v * (1 - s))
         int q = Math.round(v * (1 - f * s))
         int t = Math.round(v * (1 - (1 - f) * s))
-      }
-      if (colorMap != null) {
-        switch (d % 6) {
+
+        switch (d) {
           case 0: return colorMap << [ red: n, green: t, blue: p, white: [n,t,p].min() ]
           case 1: return colorMap << [ red: q, green: n, blue: p, white: [q,n,p].min() ]
           case 2: return colorMap << [ red: p, green: n, blue: t, white: [p,n,t].min() ]
           case 3: return colorMap << [ red: p, green: q, blue: n, white: [p,q,n].min() ]
           case 4: return colorMap << [ red: t, green: p, blue: n, white: [t,p,n].min() ]
           case 5: return colorMap << [ red: n, green: p, blue: q, white: [n,p,q].min() ]
-      }
-    }
+        }
     }
     else {
         log.error "${device.displayName}: hsvToRGBW(): Cannot obtain color information from colorMap: ${colorMap}"
