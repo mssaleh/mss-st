@@ -9,7 +9,7 @@ metadata {
 		capability "Health Check"
 		capability "Polling"
 		capability "Configuration"
-        capability "Switch"
+    capability "Switch"
 
 		attribute "thermostatFanState", "string"
 
@@ -18,8 +18,8 @@ metadata {
 		command "lowerCoolSetpoint"
 		command "raiseCoolSetpoint"
 		command "poll"
-        command "on"
-        command "off"
+    command "on"
+    command "off"
 
 		fingerprint deviceId: "0x0806"
 		fingerprint inClusters: "0x43,0x40,0x45,0x44,0x42,0x31,0x85,0x72,0x86"
@@ -721,4 +721,3 @@ def getTempInDeviceScale(temp, scale) {
 def roundC (tempC) {
 	return (Math.round(tempC.toDouble() * 2))/2
 }
-
