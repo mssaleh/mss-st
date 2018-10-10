@@ -64,7 +64,7 @@ metadata {
 			state "low", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
 			state "medium", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
 			state "high", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
-			state "fanAuto", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-auto"
+			state "auto", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-auto"
 			// state "circulate", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-circulate"
 			state "...", label: "Updating...", nextState:"...", backgroundColor:"#ffffff"
 		}
@@ -262,10 +262,10 @@ def zwaveEvent(physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanMod
 	def map = [name: "thermostatFanMode", data:[supportedThermostatFanModes: state.supportedFanModes]]
 	switch (cmd.fanMode) {
 		case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_AUTO_LOW:
-			map.value = "fanAuto"
+			map.value = "auto"
 			break
 		// case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_AUTO:
-		// 	map.value = "fanAuto"
+		// 	map.value = "auto"
 		// 	break
     case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_LOW:
 			map.value = "low"
@@ -297,7 +297,7 @@ def zwaveEvent(physicalgraph.zwave.commands.thermostatmodev2.ThermostatModeSuppo
 
 def zwaveEvent(physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeSupportedReport cmd) {
 	def supportedFanModes = []
-	if(cmd.fanAuto) { supportedFanModes << "auto" }
+	if(cmd.auto) { supportedFanModes << "auto" }
 	// if(cmd.circulation) { supportedFanModes << "low" }
 	if(cmd.low) { supportedFanModes << "low" }
   if(cmd.medium) { supportedFanModes << "medium" }
@@ -614,12 +614,12 @@ def setGetThermostatMode(data) {
 }
 
 def getFanModeMap() { [
-		"fanAuto": 0,
+		"auto": 0,
 		"low": 1,
     "medium": 5,
     "high": 3 // needs verification
     // "circulate": 6
-		// "fanAuto": 0,
+		// "auto": 0,
 		// "on": 1,
 		// "circulate": 6
 		// -=Uninitialized
@@ -668,7 +668,7 @@ def fanOn() {
 }
 
 def fanAuto() {
-	switchToFanMode("fanAuto")
+	switchToFanMode("auto")
 }
 
 def fanLow() {
