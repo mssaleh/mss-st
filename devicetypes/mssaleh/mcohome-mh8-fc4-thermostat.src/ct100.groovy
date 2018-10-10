@@ -1,8 +1,11 @@
 metadata {
-	definition (name: "MCOHome MH8-FC4 Thermostat", namespace: "mssaleh", author: "Mohammed Saleh", ocfDeviceType: "oic.d.thermostat") {
+	// Automatically generated. Make future change here.
+	definition (name: "CT100 Thermostat", namespace: "smartthings", author: "SmartThings") {
 		capability "Actuator"
 		capability "Temperature Measurement"
+		capability "Relative Humidity Measurement"
 		capability "Thermostat"
+		capability "Battery"
 		capability "Refresh"
 		capability "Sensor"
 		capability "Health Check"
@@ -16,17 +19,13 @@ metadata {
 		command "lowerCoolSetpoint"
 		command "raiseCoolSetpoint"
 		command "poll"
-		command "fanLow"
-		command "fanMedium"
-		command "fanHigh"
-		command "fanAuto"
 
-		fingerprint mfr: "015F", prod: "0802", model: "3102"
-		fingerprint type: "0806", cc: "43,40,45,44,42,31,85,72,86"
+		fingerprint deviceId: "0x08", inClusters: "0x43,0x40,0x44,0x31,0x80,0x85,0x60"
+		fingerprint mfr:"0098", prod:"6401", model:"0107", deviceJoinName: "2Gig CT100 Programmable Thermostat"
 	}
 
 	tiles {
-		multiAttributeTile(name:"temperature", type:"generic", width:2, height:2, canChangeIcon: true) {
+		multiAttributeTile(name:"temperature", type:"generic", width:3, height:2, canChangeIcon: true) {
 			tileAttribute("device.temperature", key: "PRIMARY_CONTROL") {
 				attributeState("temperature", label:'${currentValue}°', icon: "st.alarm.temperature.normal",
 					backgroundColors:[
@@ -49,28 +48,28 @@ metadata {
 					]
 				)
 			}
-			// tileAttribute("device.batteryIcon", key: "SECONDARY_CONTROL") {
-			// 	attributeState "ok_battery", label:'${currentValue}%', icon:"st.arlo.sensor_battery_4"
-			// 	attributeState "low_battery", label:'Low Battery', icon:"st.arlo.sensor_battery_0"
-			// }
+			tileAttribute("device.batteryIcon", key: "SECONDARY_CONTROL") {
+				attributeState "ok_battery", label:'${currentValue}%', icon:"st.arlo.sensor_battery_4"
+				attributeState "low_battery", label:'Low Battery', icon:"st.arlo.sensor_battery_0"
+			}
 		}
 		standardTile("mode", "device.thermostatMode", width:2, height:2, inactiveLabel: false, decoration: "flat") {
 			state "off", action:"switchMode", nextState:"...", icon: "st.thermostat.heating-cooling-off"
 			state "heat", action:"switchMode", nextState:"...", icon: "st.thermostat.heat"
 			state "cool", action:"switchMode", nextState:"...", icon: "st.thermostat.cool"
-			// state "auto", action:"switchMode", nextState:"...", icon: "st.thermostat.auto"
-			// state "emergency heat", action:"switchMode", nextState:"...", icon: "st.thermostat.emergency-heat"
+			state "auto", action:"switchMode", nextState:"...", icon: "st.thermostat.auto"
+			state "emergency heat", action:"switchMode", nextState:"...", icon: "st.thermostat.emergency-heat"
 			state "...", label: "Updating...",nextState:"...", backgroundColor:"#ffffff"
 		}
-		// standardTile("fanMode", "device.thermostatFanMode", width:2, height:2, inactiveLabel: false, decoration: "flat") {
-		// 	state "low", action:"switchFanMode", nextState:"...", label: "Fan Low"
-		// 	state "medium", action:"switchFanMode", nextState:"...", label: "Fan Med"
-		// 	state "high", action:"switchFanMode", nextState:"...", label: "Fan High"
-		// 	state "...", label: "Updating...", nextState:"...", backgroundColor:"#ffffff"
-		// }
-		// standardTile("humidity", "device.humidity", width:2, height:2, inactiveLabel: false, decoration: "flat") {
-		// 	state "humidity", label:'${currentValue}%', icon:"st.Weather.weather12"
-		// }
+		standardTile("fanMode", "device.thermostatFanMode", width:2, height:2, inactiveLabel: false, decoration: "flat") {
+			state "auto", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-auto"
+			state "on", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
+			state "circulate", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-circulate"
+			state "...", label: "Updating...", nextState:"...", backgroundColor:"#ffffff"
+		}
+		standardTile("humidity", "device.humidity", width:2, height:2, inactiveLabel: false, decoration: "flat") {
+			state "humidity", label:'${currentValue}%', icon:"st.Weather.weather12"
+		}
 		standardTile("lowerHeatingSetpoint", "device.heatingSetpoint", width:2, height:1, inactiveLabel: false, decoration: "flat") {
 			state "heatingSetpoint", action:"lowerHeatingSetpoint", icon:"st.thermostat.thermostat-left"
 		}
@@ -97,8 +96,7 @@ metadata {
 		}
 		main "temperature"
 		details(["temperature", "lowerHeatingSetpoint", "heatingSetpoint", "raiseHeatingSetpoint", "lowerCoolSetpoint",
-				"coolingSetpoint", "raiseCoolSetpoint", "mode", "thermostatOperatingState", "refresh"])
-		// removed "fanMode", "humidity",
+				"coolingSetpoint", "raiseCoolSetpoint", "mode", "fanMode", "humidity", "thermostatOperatingState", "refresh"])
 	}
 }
 
