@@ -6,6 +6,7 @@ metadata {
 		capability "Refresh"
 		capability "Sensor"
 		capability "Health Check"
+		capability "Polling"
 
 		attribute "thermostatFanState", "string"
 
@@ -321,7 +322,8 @@ def zwaveEvent(physicalgraph.zwave.Command cmd) {
 // Command Implementations
 def poll() {
 	// Call refresh which will cap the polling to once every 2 minutes
-	refresh()
+	// refresh()
+	pollDevice() // change back to reresh if more than one instance is installed
 }
 
 def refresh() {
