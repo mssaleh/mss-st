@@ -123,66 +123,23 @@ def initialize() {
 	pollDevice()
 }
 
-// def parse(String description)
-// {
-// 	def result = null
-// 	if (description == "updated") {
-// 	} else {
-// 		def zwcmd = zwave.parse(description, [0x42:1, 0x43:2, 0x31: 3])
-// 		if (zwcmd) {
-// 			result = zwaveEvent(zwcmd)
-// 		} else {
-// 			log.debug "$device.displayName couldn't parse $description"
-// 		}
-// 	}
-// 	if (!result) {
-// 		return []
-// 	}
-// 	return [result]
-// 	log.debug "description: $result"
-// }
-
 def parse(String description)
 {
-	def map = createEvent(zwaveEvent(zwave.parse(description, [0x42:1, 0x43:2, 0x31: 3])))
-	if (!map) {
-		return null
+	def result = null
+	if (description == "updated") {
+	} else {
+		def zwcmd = zwave.parse(description, [0x42:1, 0x43:2, 0x31: 3])
+		if (zwcmd) {
+			result = zwaveEvent(zwcmd)
+		} else {
+			log.debug "$device.displayName couldn't parse $description"
+		}
 	}
-
-	def result = [map]
-	if (map.isStateChange && map.name in ["heatingSetpoint","coolingSetpoint","thermostatMode"]) {
-		def map2 = [
-			name: "thermostatSetpoint",
-			unit: getTemperatureScale()
-		]
-		if (map.name == "thermostatMode") {
-			state.lastTriedMode = map.value
-			if (map.value == "cool") {
-				map2.value = device.latestValue("coolingSetpoint")
-				log.info "THERMOSTAT, latest cooling setpoint = ${map2.value}"
-			}
-			else {
-				map2.value = device.latestValue("heatingSetpoint")
-				log.info "THERMOSTAT, latest heating setpoint = ${map2.value}"
-			}
-		}
-		else {
-			def mode = device.latestValue("thermostatMode")
-			log.info "THERMOSTAT, latest mode = ${mode}"
-			if ((map.name == "heatingSetpoint" && mode == "heat") || (map.name == "coolingSetpoint" && mode == "cool")) {
-				map2.value = map.value
-				map2.unit = map.unit
-			}
-		}
-		if (map2.value != null) {
-			log.debug "THERMOSTAT, adding setpoint event: $map"
-			result << createEvent(map2)
-		}
-	} else if (map.name == "thermostatFanMode" && map.isStateChange) {
-		state.lastTriedFanMode = map.value
+	if (!result) {
+		return []
 	}
-	log.debug "Parse returned $result"
-	result
+	return [result]
+	log.debug "description: $result"
 }
 
 // Event Generation
@@ -307,9 +264,9 @@ def zwaveEvent(physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanMod
 		case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_AUTO_LOW:
 			map.value = "fanAuto"
 			break
-		case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_AUTO:
-			map.value = "fanAuto"
-			break
+		// case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_AUTO:
+		// 	map.value = "fanAuto"
+		// 	break
     case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_LOW:
 			map.value = "low"
 			break
@@ -340,7 +297,7 @@ def zwaveEvent(physicalgraph.zwave.commands.thermostatmodev2.ThermostatModeSuppo
 
 def zwaveEvent(physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeSupportedReport cmd) {
 	def supportedFanModes = []
-	if(cmd.fanAuto) { supportedFanModes << "fanAuto" }
+	if(cmd.fanAuto) { supportedFanModes << "auto" }
 	// if(cmd.circulation) { supportedFanModes << "low" }
 	if(cmd.low) { supportedFanModes << "low" }
   if(cmd.medium) { supportedFanModes << "medium" }
