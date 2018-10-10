@@ -61,10 +61,10 @@ metadata {
 		}
 		standardTile("fanMode", "device.thermostatFanMode", width:2, height:2, inactiveLabel: false, decoration: "flat") {
 			// state "on", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
-			state "low", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
-			state "medium", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
-			state "high", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-on"
-			state "auto", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-auto"
+			state "low", action:"switchFanMode", nextState:"...", label: "Fan Low"
+			state "medium", action:"switchFanMode", nextState:"...", label: "Fan Med"
+			state "high", action:"switchFanMode", nextState:"...", label: "Fan High"
+			state "auto", action:"switchFanMode", nextState:"...", label: "Fan Auto"
 			// state "circulate", action:"switchFanMode", nextState:"...", icon: "st.thermostat.fan-circulate"
 			state "...", label: "Updating...", nextState:"...", backgroundColor:"#ffffff"
 		}

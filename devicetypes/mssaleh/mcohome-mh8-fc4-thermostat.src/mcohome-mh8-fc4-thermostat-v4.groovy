@@ -92,6 +92,9 @@ metadata {
 		details(["temperature", "lowerHeatingSetpoint", "heatingSetpoint", "raiseHeatingSetpoint", "lowerCoolSetpoint",
 				"coolingSetpoint", "raiseCoolSetpoint", "mode", "fanMode", "thermostatOperatingState", "refresh"])
 	}
+
+	simulator {
+	}
 }
 
 def installed() {
