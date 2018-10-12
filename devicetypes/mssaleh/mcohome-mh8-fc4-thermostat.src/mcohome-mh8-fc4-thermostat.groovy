@@ -7,6 +7,7 @@ metadata {
 		capability "Sensor"
 		capability "Health Check"
 		capability "Polling"
+		capability "Switch"
 
 		attribute "thermostatFanState", "string"
 
@@ -643,8 +644,19 @@ def setGetThermostatFanMode(data) {
 }
 
 def off() {
-	switchToMode("off")
+	delayBetween([
+		zwave.thermostatModeV2.thermostatModeSet(mode: 0).format(),
+		zwave.thermostatModeV2.thermostatModeGet().format()
+	], standardDelay)
 }
+
+def on() {
+	delayBetween([
+		zwave.thermostatModeV2.thermostatModeSet(mode: 2).format(),
+		zwave.thermostatModeV2.thermostatModeGet().format()
+	], standardDelay)
+}
+
 
 def heat() {
 	switchToMode("heat")
