@@ -509,14 +509,15 @@ def updateSubscription() {
 def bridgeHandler(evt) {
     def json = new JsonSlurper().parseText(evt.value)
     log.debug "Received device event from bridge: ${json}"
-
-    if (json.type == "notify") {
-        if (json.name == "Contacts") {
-            sendNotificationToContacts("${json.value}", recipients)
-        } else {
-            sendNotificationEvent("${json.value}")
-        }
-        return
+    if (json != null) {
+    	if (json.type == "notify") {
+        	if (json.name == "Contacts") {
+            	sendNotificationToContacts("${json.value}", recipients)
+        	} else {
+            	sendNotificationEvent("${json.value}")
+        	}
+        	return
+	}
     }
 
     // @NOTE this is stored AWFUL, we need a faster lookup table
