@@ -234,6 +234,13 @@ definition(
         ],
         action: "actionOnOff"
     ],
+    "sceneSwitch": [
+        name: "Scene Switch",
+        capability: "capability.switch",
+        attributes: [
+            "scene"
+        ]
+    ],
     "shockSensor": [
         name: "Shock Sensor",
         capability: "capability.shockSensor",
@@ -765,4 +772,3 @@ def actionTimedSession(device, attribute, value) {
         device.setTimeRemaining(value)
     }
 }
-
