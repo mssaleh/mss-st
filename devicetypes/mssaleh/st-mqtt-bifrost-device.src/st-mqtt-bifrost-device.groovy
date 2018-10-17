@@ -97,16 +97,13 @@ def deviceNotification(message) {
         parsed.body.callback = device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")
     }
 
-// private getHeader(userpass){
     def headers = [:]
     headers.put("HOST", "$ip:$port")
     headers.put("Content-Type", "application/json")
     // if (userpass != null)
     //    headers.put("Authorization", userpass)
-//     return headers
-// }
 
-def hubAction = new physicalgraph.device.HubAction(
+    def hubAction = new physicalgraph.device.HubAction(
         method: "POST",
         path: parsed.path,
         headers: headers,
