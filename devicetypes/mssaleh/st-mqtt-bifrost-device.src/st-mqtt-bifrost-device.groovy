@@ -27,6 +27,18 @@ metadata {
             required: true,
             displayDuringSetup: true
         )
+        // input("username", "string",
+        //     title: "MQTT Broker user name",
+        //     description: "MQTT Broker user name",
+        //     required: false,
+        //     displayDuringSetup: true
+        // )
+        // input("password", "string",
+        //     title: "MQTT Broker user password",
+        //     description: "MQTT Broker password",
+        //     required: false,
+        //     displayDuringSetup: true
+        // )
     }
 
     simulator {}
@@ -59,6 +71,14 @@ def parse(String description) {
     return createEvent(name: "message", value: new JsonOutput().toJson(msg.data))
 }
 
+// def encodCredentials(username, password){
+//   if (username != null && password != null) {
+// 	def userpassascii = "${username}:${password}"
+//     def userpass = "Basic " + userpassascii.encodeAsBase64().toString()
+//     return userpass
+//   }
+// }
+
 // Send message to the Bridge
 def deviceNotification(message) {
     if (device.hub == null)
@@ -77,11 +97,16 @@ def deviceNotification(message) {
         parsed.body.callback = device.hub.getDataValue("localIP") + ":" + device.hub.getDataValue("localSrvPortTCP")
     }
 
+// private getHeader(userpass){
     def headers = [:]
     headers.put("HOST", "$ip:$port")
     headers.put("Content-Type", "application/json")
+    // if (userpass != null)
+    //    headers.put("Authorization", userpass)
+//     return headers
+// }
 
-    def hubAction = new physicalgraph.device.HubAction(
+def hubAction = new physicalgraph.device.HubAction(
         method: "POST",
         path: parsed.path,
         headers: headers,
