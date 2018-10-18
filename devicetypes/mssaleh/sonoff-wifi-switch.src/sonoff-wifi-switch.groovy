@@ -2,7 +2,7 @@ import groovy.json.JsonSlurper
 import groovy.util.XmlSlurper
 
 metadata {
-	definition (name: "Sonoff Wifi Switch", namespace: "mssaleh", author: "Eric Maycock and Mohammed Saleh", ocfDeviceType: "oic.d.switch", vid: "generic-switch") {
+		definition (name: "Sonoff Wifi Switch", namespace: "mssaleh", author: "Eric Maycock", ocfDeviceType: "oic.d.switch", vid: "generic-switch") {
 		capability "Actuator"
 		capability "Switch"
 		capability "Refresh"
@@ -14,14 +14,14 @@ metadata {
     command "reboot"
 
     attribute   "needUpdate", "string"
-		}
+	  }
 
 	simulator {
 	}
 
-  preferences {
-    input description: "Once you change values on this page, the corner of the configuration icon will change orange until all configuration parameters are updated.", title: "Settings", displayDuringSetup: false, type: "paragraph", element: "paragraph"
-	generate_preferences(configuration_model())
+    preferences {
+    input description: "Once you change values on this page, the corner of the \"configuration\" icon will change orange until all configuration parameters are updated.", title: "Settings", displayDuringSetup: false, type: "paragraph", element: "paragraph"
+		generate_preferences(configuration_model())
 	}
 
 	tiles (scale: 2){
@@ -165,12 +165,9 @@ def refresh() {
     return cmds
 }
 
-
 def poll() {
 	log.debug "poll()"
-    def cmds = []
-    cmds << getAction("/status")
-    return cmds
+	refresh()
 }
 
 def ping() {
@@ -405,6 +402,7 @@ def configuration_model()
 </Value>
 <Value type="list" byteSize="1" index="pos" label="Boot Up State" min="0" max="2" value="0" setting_type="lan" fw="">
 <Help>
+Default: Off
 </Help>
     <Item label="Off" value="0" />
     <Item label="On" value="1" />
@@ -414,12 +412,13 @@ def configuration_model()
 <Help>
 Automatically turn the switch off after this many seconds.
 Range: 0 to 65536
+Default: 0 (Disabled)
 </Help>
-
 </Value>
 <Value type="list" byteSize="1" index="switchtype" label="External Switch Type" min="0" max="1" value="0" setting_type="lan" fw="">
 <Help>
 If a switch is attached to GPIO 14.
+Default: Momentary
 </Help>
     <Item label="Momentary" value="0" />
     <Item label="Toggle" value="1" />
