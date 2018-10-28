@@ -28,7 +28,7 @@ metadata {
         capability "Sensor"
         capability "Relay Switch"
         capability "Configuration"
-        capability "Temperature Measurement"
+        // capability "Temperature Measurement"
         capability "Health Check"
 
         fingerprint mfr: "0159", prod: "0002", model: "0053"
