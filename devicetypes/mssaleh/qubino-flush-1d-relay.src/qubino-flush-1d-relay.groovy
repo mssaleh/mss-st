@@ -20,7 +20,7 @@
  */
 
 metadata {
-    definition (name: "Qubino Flush 1D Relay", namespace: "mssaleh", author: "Eric Maycock") {
+    definition (name: "Qubino Flush 1D Relay", namespace: "erocm123", author: "Eric Maycock") {
         capability "Actuator"
         capability "Switch"
         capability "Polling"
@@ -28,13 +28,13 @@ metadata {
         capability "Sensor"
         capability "Relay Switch"
         capability "Configuration"
-        // capability "Temperature Measurement"
+        capability "Temperature Measurement"
         capability "Health Check"
 
         fingerprint mfr: "0159", prod: "0002", model: "0053"
         fingerprint deviceId: "0x1001", inClusters: "0x5E,0x86,0x72,0x5A,0x73,0x20,0x27,0x25,0x85,0x8E,0x59,0x70", outClusters: "0x20"
         fingerprint deviceId: "0x1001", inClusters: "0x5E,0x86,0x72,0x5A,0x73,0x20,0x27,0x25,0x30,0x71,0x31,0x60,0x85,0x8E,0x59,0x70", outClusters: "0x20" // With temp sensor
-
+        
     }
 
     simulator {
@@ -188,6 +188,16 @@ def zwaveEvent(physicalgraph.zwave.commands.sensorbinaryv2.SensorBinaryReport cm
                     break
             }
             break
+    }
+}
+
+def zwaveEvent(physicalgraph.zwave.commands.securityv1.SecurityMessageEncapsulation cmd) {
+    def encapsulatedCommand = cmd.encapsulatedCommand([0x98: 1, 0x20: 1, 0x70: 1, 0x25: 1])
+    if (encapsulatedCommand) {
+        state.sec = 1
+        zwaveEvent(encapsulatedCommand)
+    } else {
+        log.warn "Unable to extract encapsulated cmd from $cmd"
     }
 }
 
@@ -437,7 +447,7 @@ def zwaveEvent(physicalgraph.zwave.commands.configurationv1.ConfigurationReport 
 }
 
 private command(physicalgraph.zwave.Command cmd) {
-    if (state.sec) {
+    if (state.sec || zwaveInfo?.zw?.contains("s") || ("0x98" in device.rawDescription?.split(" "))) {
         zwave.securityV1.securityMessageEncapsulation().encapsulate(cmd).format()
     } else {
         cmd.format()
