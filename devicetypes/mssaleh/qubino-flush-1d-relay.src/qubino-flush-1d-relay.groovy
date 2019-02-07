@@ -20,7 +20,7 @@
  */
 
 metadata {
-    definition (name: "Qubino Flush 1D Relay", namespace: "erocm123", author: "Eric Maycock") {
+    definition (name: "Qubino Flush 1D Relay", namespace: "mssaleh", author: "Eric Maycock") {
         capability "Actuator"
         capability "Switch"
         capability "Polling"
@@ -28,7 +28,7 @@ metadata {
         capability "Sensor"
         capability "Relay Switch"
         capability "Configuration"
-        capability "Temperature Measurement"
+        // capability "Temperature Measurement"
         capability "Health Check"
 
         fingerprint mfr: "0159", prod: "0002", model: "0053"
