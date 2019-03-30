@@ -9,7 +9,7 @@ metadata {
     capability "Switch"
     capability "Temperature Measurement"
 
-    fingerprint profileId: "0104", inClusters: "0000, 0002, 0006"
+	fingerprint profileId: "0104", inClusters: "0000, 0002, 0006"
 	}
 
     // simulator metadata
@@ -201,6 +201,8 @@ def refresh() {
 		"st rattr 0x${device.deviceNetworkId} 0x02 0x0006 0x0000 0x10 0 600 null", "delay 500",
 		"st rattr 0x${device.deviceNetworkId} 0x02 0x0008 0x0000 0x20 1 3600 0x01"
     ]
+
+}
 
 def configure() {
     if (state.debug) log.info "Configuring Reporting and Bindings."
