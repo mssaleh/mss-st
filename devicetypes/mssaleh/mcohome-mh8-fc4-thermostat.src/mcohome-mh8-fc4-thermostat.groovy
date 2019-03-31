@@ -1,5 +1,5 @@
 metadata {
-	definition (name: "MCOHome MH8-FC4 Thermostat", namespace: "mssaleh", author: "Mohammed Saleh", ocfDeviceType: "oic.d.thermostat") {
+	definition (name: "MCOHome MH8-FC4 Thermostat", namespace: "mssaleh", author: "Mohammed Saleh", ocfDeviceType: "oic.d.thermostat", vid: "generic-thermostat-1") {
 		capability "Actuator"
 		capability "Temperature Measurement"
 		capability "Thermostat"
@@ -17,6 +17,7 @@ metadata {
 		command "raiseHeatingSetpoint"
 		command "lowerCoolSetpoint"
 		command "raiseCoolSetpoint"
+   		command "poll"
 		command "fanLow"
 		command "fanMedium"
 		command "fanHigh"
@@ -93,9 +94,6 @@ metadata {
 		details(["temperature", "lowerHeatingSetpoint", "heatingSetpoint", "raiseHeatingSetpoint", "lowerCoolSetpoint",
 				"coolingSetpoint", "raiseCoolSetpoint", "mode", "fanMode", "thermostatOperatingState", "refresh"])
 	}
-
-	simulator {
-	}
 }
 
 def installed() {
@@ -131,7 +129,7 @@ def parse(String description)
 	def result = null
 	if (description == "updated") {
 	} else {
-		def zwcmd = zwave.parse(description, [0x31: 3, 0x40: 2, 0x42: 1, 0x43: 2, 0x44: 3, 0x45: 1, 0x85: 2])
+		def zwcmd = zwave.parse(description, [0x42:1, 0x43:2, 0x31: 3])
 		if (zwcmd) {
 			result = zwaveEvent(zwcmd)
 		} else {
@@ -219,12 +217,15 @@ def zwaveEvent(physicalgraph.zwave.commands.thermostatfanstatev1.ThermostatFanSt
 	def map = [name: "thermostatFanState", unit: ""]
 	switch (cmd.fanOperatingState) {
 		case 0:
-			map.value = "idle"
+			map.value = "auto"
 			break
 		case 1:
 			map.value = "low"
 			break
-		case 2:
+		// case 2:
+		// 	map.value = "high"
+		// 	break
+		case 3:
 			map.value = "high"
 			break
 		case 5:
@@ -272,9 +273,6 @@ def zwaveEvent(physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanMod
 		case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_HIGH:
 			map.value = "high"
 			break
-			// case physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanModeReport.FAN_MODE_CIRCULATION:
-			// 	map.value = "circulate"
-			// 	break
 	}
 	sendEvent(map)
 }
@@ -285,7 +283,7 @@ def zwaveEvent(physicalgraph.zwave.commands.thermostatmodev2.ThermostatModeSuppo
 	if(cmd.heat) { supportedModes << "heat" }
 	if(cmd.cool) { supportedModes << "cool" }
 	// if(cmd.auto) { supportedModes << "auto" }
-	// if(cmd.auxiliaryemergencyHeat) { supportedModes << "emergency heat" }
+	//if(cmd.auxiliaryemergencyHeat) { supportedModes << "emergency heat" }
 
 	state.supportedModes = supportedModes
 	sendEvent(name: "supportedThermostatModes", value: supportedModes, displayed: false)
@@ -296,8 +294,8 @@ def zwaveEvent(physicalgraph.zwave.commands.thermostatfanmodev3.ThermostatFanMod
 	if(cmd.auto) { supportedFanModes << "auto" }
 	// if(cmd.circulation) { supportedFanModes << "circulate" }
 	if(cmd.low) { supportedFanModes << "low" }
-  if(cmd.medium) { supportedFanModes << "medium" }
-  if(cmd.high) { supportedFanModes << "high" }
+    if(cmd.medium) { supportedFanModes << "medium" }
+    if(cmd.high) { supportedFanModes << "high" }
 
 	state.supportedFanModes = supportedFanModes
 	sendEvent(name: "supportedThermostatFanModes", value: supportedFanModes, displayed: false)
@@ -326,15 +324,19 @@ def zwaveEvent(physicalgraph.zwave.Command cmd) {
 // Command Implementations
 def poll() {
 	// Call refresh which will cap the polling to once every 2 minutes
-	// refresh()
-	pollDevice() // change back to reresh if more than one instance is installed
+	refresh()
 }
 
 def refresh() {
-	// Only allow refresh every 2 minutes to prevent flooding the Zwave network
+	// Only allow refresh every 4 minutes to prevent flooding the Zwave network
 	def timeNow = now()
-	if (!state.refreshTriggeredAt || (2 * 60 * 1000 < (timeNow - state.refreshTriggeredAt))) {
+	if (!state.refreshTriggeredAt || (4 * 60 * 1000 < (timeNow - state.refreshTriggeredAt))) {
 		state.refreshTriggeredAt = timeNow
+		if (!state.longRefreshTriggeredAt || (48 * 60 * 60 * 1000 < (timeNow - state.longRefreshTriggeredAt))) {
+			state.longRefreshTriggeredAt = timeNow
+			// poll supported modes once every 2 days: they're not likely to change
+			runIn(10, "longPollDevice", [overwrite: true])
+		}
 		// use runIn with overwrite to prevent multiple DTH instances run before state.refreshTriggeredAt has been saved
 		runIn(2, "pollDevice", [overwrite: true])
 	}
@@ -342,14 +344,20 @@ def refresh() {
 
 def pollDevice() {
 	def cmds = []
-	cmds << new physicalgraph.device.HubAction(zwave.thermostatModeV2.thermostatModeSupportedGet().format())
-	cmds << new physicalgraph.device.HubAction(zwave.thermostatFanModeV3.thermostatFanModeSupportedGet().format())
 	cmds << new physicalgraph.device.HubAction(zwave.thermostatModeV2.thermostatModeGet().format())
 	cmds << new physicalgraph.device.HubAction(zwave.thermostatFanModeV3.thermostatFanModeGet().format())
 	cmds << new physicalgraph.device.HubAction(zwave.sensorMultilevelV2.sensorMultilevelGet().format()) // current temperature
 	cmds << new physicalgraph.device.HubAction(zwave.thermostatOperatingStateV1.thermostatOperatingStateGet().format())
 	cmds << new physicalgraph.device.HubAction(zwave.thermostatSetpointV1.thermostatSetpointGet(setpointType: 1).format())
 	cmds << new physicalgraph.device.HubAction(zwave.thermostatSetpointV1.thermostatSetpointGet(setpointType: 2).format())
+	sendHubCommand(cmds)
+}
+
+// these values aren't likely to change
+def longPollDevice() {
+	def cmds = []
+	cmds << new physicalgraph.device.HubAction(zwave.thermostatModeV2.thermostatModeSupportedGet().format())
+	cmds << new physicalgraph.device.HubAction(zwave.thermostatFanModeV3.thermostatFanModeSupportedGet().format())
 	sendHubCommand(cmds)
 }
 
@@ -408,7 +416,7 @@ def updateCoolingSetpoint(data) {
 }
 
 def enforceSetpointLimits(setpoint, data) {
-	def locationScale = getTemperatureScale()
+	def locationScale = getTemperatureScale() 
 	def minSetpoint = (setpoint == "heatingSetpoint") ? getTempInDeviceScale(40, "F") : getTempInDeviceScale(50, "F")
 	def maxSetpoint = (setpoint == "heatingSetpoint") ? getTempInDeviceScale(90, "F") : getTempInDeviceScale(99, "F")
 	def deadband = (state.scale == 1) ? 3 : 2  // 3°F, 2°C
@@ -423,7 +431,7 @@ def enforceSetpointLimits(setpoint, data) {
 	}
 	// Enforce 3 degrees F deadband between setpoints
 	if (setpoint == "heatingSetpoint") {
-		heatingSetpoint = targetValue
+		heatingSetpoint = targetValue 
 		coolingSetpoint = (heatingSetpoint + deadband > getTempInDeviceScale(data.coolingSetpoint, locationScale)) ? heatingSetpoint + deadband : null
 	}
 	if (setpoint == "coolingSetpoint") {
@@ -488,9 +496,9 @@ def updateThermostatSetpoint(setpoint, value) {
 	def heatingSetpoint = (setpoint == "heatingSetpoint") ? value : getTempInLocalScale("heatingSetpoint")
 	def coolingSetpoint = (setpoint == "coolingSetpoint") ? value : getTempInLocalScale("coolingSetpoint")
 	def mode = device.currentValue("thermostatMode")
-	def thermostatSetpoint = coolingSetpoint    // corresponds to (mode == "cool")
-	if (mode == "heat") {
-		thermostatSetpoint = heatingSetpoint
+	def thermostatSetpoint = heatingSetpoint    // corresponds to (mode == "heat" || mode == "emergency heat")
+	if (mode == "cool") {
+		thermostatSetpoint = coolingSetpoint
 	} else if (mode == "auto" || mode == "off") {
 		// Set thermostatSetpoint to the setpoint closest to the current temperature
 		def currentTemperature = getTempInLocalScale("temperature")
@@ -583,10 +591,10 @@ def getModeMap() { [
 	"off": 0,
 	"heat": 1,
 	"cool": 2,
-	"fan only": 6
-
+   	"fan only": 6
 	// "auto": 3,
 	// "emergency heat": 4
+
 	// ref:
 	// 0=Off
 	// 1=Heat
@@ -602,7 +610,7 @@ def getModeMap() { [
 	// 11=Heat Eco
 	// 12=Cool Eco
 	// 13=Away
- ]}
+]}
 
 def setThermostatMode(String value) {
 	switchToMode(value)
@@ -618,19 +626,7 @@ def getFanModeMap() { [
 	"auto": 0,
 	"low": 1,
 	"medium": 5,
-	"high": 3 // needs verification
-	// "circulate": 6
-	// "auto": 0,
-	// "on": 1,
-	// "circulate": 6
-	// -=Uninitialized
-	// 0=Auto
-	// 1=On
-	// 2=Two
-	// 3=Three
-	// 4=Four
-	// 5=Five
-	// 6=Six
+	"high": 3
 ]}
 
 def setThermostatFanMode(String value) {
@@ -642,6 +638,10 @@ def setGetThermostatFanMode(data) {
 			new physicalgraph.device.HubAction(zwave.thermostatFanModeV3.thermostatFanModeGet().format())]
 	sendHubCommand(cmds)
 }
+
+// def off() {
+// 	switchToMode("off")
+// }
 
 def off() {
 	delayBetween([
@@ -656,7 +656,6 @@ def on() {
 		zwave.thermostatModeV2.thermostatModeGet().format()
 	], standardDelay)
 }
-
 
 def heat() {
 	switchToMode("heat")
@@ -682,6 +681,10 @@ def fanAuto() {
 	switchToFanMode("auto")
 }
 
+// def fanCirculate() {
+// 	switchToFanMode("circulate")
+// }
+
 def fanLow() {
 	switchToFanMode("low")
 }
@@ -693,10 +696,6 @@ def fanMedium() {
 def fanHigh() {
 	switchToFanMode("high")
 }
-
-// def fanCirculate() {
-// 	switchToFanMode("circulate")
-// }
 
 // Get stored temperature from currentState in current local scale
 def getTempInLocalScale(state) {
