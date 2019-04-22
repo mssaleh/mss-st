@@ -1,6 +1,6 @@
 
 metadata {
-	definition (name: "Yeelight", namespace: "mssaleh", author: "Simon Tether", mnmn: "SmartThings", vid: "generic-rgbw-color-bulb") {
+	definition (name: "Yeelight Color Basic", namespace: "mssaleh", author: "Simon Tether", mnmn: "SmartThings", vid: "generic-rgbw-color-bulb") {
 		capability "Switch Level"
 		capability "Color Control"
 		capability "Color Temperature"
