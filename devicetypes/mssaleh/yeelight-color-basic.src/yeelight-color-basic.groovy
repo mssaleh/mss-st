@@ -65,67 +65,52 @@ metadata {
 	valueTile("hue", "device.hue", inactiveLabel: false, decoration: "flat") {
 		state "hue", label: 'Hue ${currentValue}   '
 	}
-	
-	standardTile("coolWhite", "device.colorName", height: 1, width: 1, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"cool white", action:"coolWhite", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8", defaultState: true
-		//state "coolWhite", label:"cool white", action:"off", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FF33CB"
-	}
-   	standardTile("warmWhite", "device.colorName", height: 1, width: 1, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"warm white", action:"warmWhite", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8", defaultState: true
-		//state "warmWhite", label:"warm white", action:"off", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FF33CB"
-	}
-	standardTile("daylight", "device.colorName", height: 1, width: 1, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"daylight", action:"daylight", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8", defaultState: true
-		//state "daylight", label:"daylight", action:"off", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FF33CB"
-	}
-	standardTile("red", "device.colorName", height: 1, width: 1, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"red", action:"red", icon:"st.illuminance.illuminance.dark", backgroundColor:"#FF0000", defaultState: true
-		//state "red", label:"red", action:"off", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FF0000"
-	}
-	standardTile("green", "device.colorName", height: 1, width: 1, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"green", action:"green", icon:"st.illuminance.illuminance.dark", backgroundColor:"#00FF00", defaultState: true
-		//state "green", label:"green", action:"off", icon:"st.illuminance.illuminance.bright", backgroundColor:"#00FF00"
-	}
-	standardTile("blue", "device.colorName", height: 1, width: 1, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"blue", action:"blue", icon:"st.illuminance.illuminance.dark", backgroundColor:"#0000FF", defaultState: true
-		//state "blue", label:"blue", action:"off", icon:"st.illuminance.illuminance.bright", backgroundColor:"#0000FF"
-	}
-	standardTile("cyan", "device.colorName", height: 1, width: 1, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"cyan", action:"cyan", icon:"st.illuminance.illuminance.dark", backgroundColor:"#00FFFF", defaultState: true
-		//state "cyan", label:"cyan", action:"off", icon:"st.illuminance.illuminance.bright", backgroundColor:"#00FFFF"
-	}
-	standardTile("magenta", "device.colorName", height: 1, width: 1, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"magenta", action:"magenta", icon:"st.illuminance.illuminance.dark", backgroundColor:"#FF0040", defaultState: true
-		//state "magenta", label:"magenta", action:"off", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FF0040"
-	}
-	standardTile("orange", "device.colorName", height: 1, width: 1, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"orange", action:"orange", icon:"st.illuminance.illuminance.dark", backgroundColor:"#FF6600", defaultState: true
-		//state "orange", label:"orange", action:"off", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FF6600"
-	}
-	standardTile("purple", "device.colorName", height: 1, width: 1, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"purple", action:"purple", icon:"st.illuminance.illuminance.dark", backgroundColor:"#BF00FF", defaultState: true
-		//state "purple", label:"purple", action:"off", icon:"st.illuminance.illuminance.bright", backgroundColor:"#BF00FF"
-	}
-	standardTile("yellow", "device.colorName", height: 1, width: 1, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"yellow", action:"yellow", icon:"st.illuminance.illuminance.dark", backgroundColor:"#FFFF00", defaultState: true
-		//state "yellow", label:"yellow", action:"off", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FFFF00"
-	}
-	standardTile("pink", "device.colorName", height: 1, width: 1, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"pink", action:"pink", icon:"st.illuminance.illuminance.dark", backgroundColor:"#FF33CB", defaultState: true
-		//state "pink", label:"pink", action:"off", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FF33CB"
-	}
-	standardTile("police", "device.colorName", height: 1, width: 1, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"police", action:"police", icon:"st.illuminance.illuminance.dark", backgroundColor:"#0000FF", defaultState: true
-	}
-	standardTile("alarm", "device.colorName", height: 1, width: 1, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"alarm", action:"alarm", icon:"st.illuminance.illuminance.dark", backgroundColor:"#FF0000", defaultState: true
-	}
-	standardTile("colourcycle", "device.colorName", height: 1, width: 1, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"colourcycle", action:"colourcycle", icon:"st.illuminance.illuminance.dark", backgroundColor:"#FF0000", defaultState: true
-	}
-	standardTile("halt", "device.colorName", height: 1, width: 3, decoration: "flat", inactiveLabel: false, canChangeIcon: false) {
-		state "off", label:"halt", action:"halt", icon:"st.illuminance.illuminance.dark", backgroundColor:"#FFFFFF", defaultState: true
-	}
+////////////////////
+        standardTile("coolWhite", "device.coolWhite", height: 1, inactiveLabel: false, canChangeIcon: false) {
+            state "offcoolWhite", label:"cool white", action:"softwhite", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
+            state "oncoolWhite", label:"cool white", action:"softwhite", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FFF1E0"
+        }
+        standardTile("daylight", "device.daylight", height: 1, inactiveLabel: false, canChangeIcon: false) {
+            state "offdaylight", label:"daylight", action:"daylight", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
+            state "ondaylight", label:"daylight", action:"daylight", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FFFFFB"
+        }
+        standardTile("warmwhite", "device.warmwhite", height: 1, inactiveLabel: false, canChangeIcon: false) {
+            state "offwarmwhite", label:"warm white", action:"warmwhite", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
+            state "onwarmwhite", label:"warm white", action:"warmwhite", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FFF4E5"
+        }
+        standardTile("red", "device.red", height: 1, inactiveLabel: false, canChangeIcon: false) {
+            state "offred", label:"red", action:"red", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
+            state "onred", label:"red", action:"red", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FF0000"
+        }
+        standardTile("green", "device.green", height: 1, inactiveLabel: false, canChangeIcon: false) {
+            state "offgreen", label:"green", action:"green", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
+            state "ongreen", label:"green", action:"green", icon:"st.illuminance.illuminance.bright", backgroundColor:"#00FF00"
+        }
+        standardTile("blue", "device.blue", height: 1, inactiveLabel: false, canChangeIcon: false) {
+            state "offblue", label:"blue", action:"blue", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
+            state "onblue", label:"blue", action:"blue", icon:"st.illuminance.illuminance.bright", backgroundColor:"#0000FF"
+        }
+        standardTile("cyan", "device.cyan", height: 1, inactiveLabel: false, canChangeIcon: false) {
+            state "offcyan", label:"cyan", action:"cyan", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
+            state "oncyan", label:"cyan", action:"cyan", icon:"st.illuminance.illuminance.bright", backgroundColor:"#00FFFF"
+        }
+        standardTile("magenta", "device.magenta", height: 1, inactiveLabel: false, canChangeIcon: false) {
+            state "offmagenta", label:"magenta", action:"magenta", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
+            state "onmagenta", label:"magenta", action:"magenta", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FF00FF"
+        }
+        standardTile("orange", "device.orange", height: 1, inactiveLabel: false, canChangeIcon: false) {
+            state "offorange", label:"orange", action:"orange", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
+            state "onorange", label:"orange", action:"orange", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FF6600"
+        }
+        standardTile("purple", "device.purple", height: 1, inactiveLabel: false, canChangeIcon: false) {
+            state "offpurple", label:"purple", action:"purple", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
+            state "onpurple", label:"purple", action:"purple", icon:"st.illuminance.illuminance.bright", backgroundColor:"#BF00FF"
+        }
+        standardTile("yellow", "device.yellow", height: 1, inactiveLabel: false, canChangeIcon: false) {
+            state "offyellow", label:"yellow", action:"yellow", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
+            state "onyellow", label:"yellow", action:"yellow", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FFFF00"
+        }
+////////////////////
 	main(["switch"])
 	details(["switch", "levelSliderControl", "rgbSelector", "reset", "colorTempControl", "refresh", 
     	"coolWhite", "warmWhite", "daylight", "red", "green", "blue", "orange", "yellow", "cyan", "magenta", "pink", "purple", 
@@ -156,14 +141,14 @@ def parse(String description) {
 	log.debug "Response '${description}'"
 }
 
-//Reset Yeelight to White, 6000K
+//Reset Yeelight to White, 4000K
 def reset() {
 	log.debug "reset"
     	//getProp()
     	delayBetween([
 		on(),
         	setColor("red":255, "hex":"#FFFFFF", "blue":255, "saturation":100.0, "hue":0.0, "green":255, "alpha":1.0),
-        	setColorTemperature(6000)
+        	setColorTemperature(4000)
     	], 300)
 }
 
