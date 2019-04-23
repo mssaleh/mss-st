@@ -176,7 +176,7 @@ def getProp() {
 def on() {
 	//getProp()
     	//delayBetween([
-        	transmit("""{"id": 1, "method": "set_power", "params":["on", "smooth", 500]}\r\n"""),
+        	transmit("""{"id": 1, "method": "set_power", "params":["on", "smooth", 500]}\r\n""") //,
 		//transmit("""{"id": 1, "method": "set_bright", "params":[${defaultONLevel}, "smooth", 100]}\r\n""")
     	//], 300)
     	sendEvent(name: "switch", value: "on")
