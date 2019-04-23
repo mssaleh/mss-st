@@ -202,6 +202,7 @@ def powerCheck() {
 //Set Yeelight Dim Level
 def setLevel(level) {
 	//getProp()
+        transmit("""{"id": 1, "method": "set_power", "params":["on", "sudden"]}\r\n""")
     	powerCheck()
 	if(level < 2) {
 		off()
@@ -216,9 +217,9 @@ def setLevel(level) {
 //Set Yeelight Colour
 def setColor(value) {
 	//getProp()
+        transmit("""{"id": 1, "method": "set_power", "params":["on", "sudden"]}\r\n""")
     	powerCheck()
 	def result = []
-    	//transmit("""{"id": 1, "method": "set_power", "params":["on", "smooth", 500]}\r\n""")
     	def red = value.red
     	def green = value.green
     	def blue = value.blue
@@ -234,6 +235,7 @@ def setColor(value) {
 //Set Yeelight Colour Temperature
 def setColorTemperature(kelvin) {
 	//getProp()
+        transmit("""{"id": 1, "method": "set_power", "params":["on", "sudden"]}\r\n""")
     	powerCheck()
 	if(kelvin > 6500) kelvin = 6500
     	log.debug "setColorTemperature: ${kelvin}K"
