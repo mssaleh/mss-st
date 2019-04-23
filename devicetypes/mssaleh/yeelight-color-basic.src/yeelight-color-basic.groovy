@@ -67,8 +67,8 @@ metadata {
 	}
 ////////////////////
         standardTile("coolWhite", "device.coolWhite", height: 1, inactiveLabel: false, canChangeIcon: false) {
-            state "offcoolWhite", label:"cool white", action:"softwhite", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
-            state "oncoolWhite", label:"cool white", action:"softwhite", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FFF1E0"
+            state "offcoolWhite", label:"cool white", action:"coolWhite", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
+            state "oncoolWhite", label:"cool white", action:"coolWhite", icon:"st.illuminance.illuminance.bright", backgroundColor:"#F5FBFE"
         }
         standardTile("daylight", "device.daylight", height: 1, inactiveLabel: false, canChangeIcon: false) {
             state "offdaylight", label:"daylight", action:"daylight", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
