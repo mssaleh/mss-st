@@ -74,9 +74,9 @@ metadata {
             state "offdaylight", label:"daylight", action:"daylight", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
             state "ondaylight", label:"daylight", action:"daylight", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FFFFFB"
         }
-        standardTile("warmwhite", "device.warmwhite", height: 1, inactiveLabel: false, canChangeIcon: false) {
-            state "offwarmwhite", label:"warm white", action:"warmWhite", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
-            state "onwarmwhite", label:"warm white", action:"warmWhite", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FFF4E5"
+        standardTile("warmWhite", "device.warmWhite", height: 1, inactiveLabel: false, canChangeIcon: false) {
+            state "offwarmWhite", label:"warm white", action:"warmWhite", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
+            state "onwarmWhite", label:"warm white", action:"warmWhite", icon:"st.illuminance.illuminance.bright", backgroundColor:"#FFF4E5"
         }
         standardTile("red", "device.red", height: 1, inactiveLabel: false, canChangeIcon: false) {
             state "offred", label:"red", action:"red", icon:"st.illuminance.illuminance.dark", backgroundColor:"#D8D8D8"
