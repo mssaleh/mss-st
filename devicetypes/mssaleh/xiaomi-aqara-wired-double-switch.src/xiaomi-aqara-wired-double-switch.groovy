@@ -1,3 +1,13 @@
+/**
+ *
+ *  Modified from DTH by a4refillpad
+ *
+ *  01.10.2017 first release
+ *  01.11.2018 Adapted the code to work with QBKG03LM
+ *  21.04.2019 handling cluster 0006 to update the app device state when the buttons are pressed manually
+ *             used code parts from: https://github.com/dschich/Smartthings/blob/master/devicetypes/dschich/Aqara-Switch-QBKG12LM.src/Aqara-Switch-QBKG12LM.groovy     
+ */
+
 metadata {
     definition (name: "Xiaomi Aqara Wired Double Switch", namespace: "mssaleh", author: "Mohammed Saleh", vid: "generic-switch") {
         capability "Actuator"
@@ -5,13 +15,15 @@ metadata {
         capability "Refresh"
         capability "Switch"
         capability "Temperature Measurement"
-
+        
         command "on2"
         command "off2"
-
+        
         attribute "switch2","ENUM", ["on","off"]
-
+        
         attribute "lastCheckin", "string"
+        
+        fingerprint profileId: "0104", deviceId: "0051", inClusters: "0000,0001,0002,0003,0004,0005,0006,0010,000A", outClusters: "0019,000A", manufacturer: "LUMI", model: "lumi.ctrl_neutral2", deviceJoinName: "Aqara Switch QBKG03LM"
     }
 
     // simulator metadata
@@ -27,20 +39,20 @@ metadata {
 
     tiles(scale: 2) {
         multiAttributeTile(name:"switch", type: "lighting", width: 6, height: 4, canChangeIcon: true){
-            tileAttribute ("device.switch", key: "PRIMARY_CONTROL") {
+            tileAttribute ("device.switch", key: "PRIMARY_CONTROL") { 
                 attributeState "on", label:'${name}', action:"switch.off", icon:"st.switches.light.on", backgroundColor:"#00a0dc", nextState:"turningOff"
                 attributeState "off", label:'${name}', action:"switch.on", icon:"st.switches.light.off", backgroundColor:"#ffffff", nextState:"turningOn"
                 attributeState "turningOn", label:'${name}', action:"switch.off", icon:"st.switches.light.on", backgroundColor:"#00a0dc", nextState:"turningOff"
                 attributeState "turningOff", label:'${name}', action:"switch.on", icon:"st.switches.light.off", backgroundColor:"#ffffff", nextState:"turningOn"
             }
-
-
-
+            
+            
+            
            	tileAttribute("device.lastCheckin", key: "SECONDARY_CONTROL") {
     			attributeState("default", label:'Last Update: ${currentValue}',icon: "st.Health & Wellness.health9")
 		   	}
         }
-
+        
         standardTile("switch2", "device.switch2", width: 2, height: 2, canChangeIcon: true) {
 			state "off", label: '${name}', action: "on2", icon: "st.switches.switch.off", backgroundColor: "#ffffff"
 			state "on", label: '${name}', action: "off2", icon: "st.switches.switch.on", backgroundColor: "#79b821"
@@ -73,7 +85,7 @@ def parse(String description) {
    def value = zigbee.parse(description)?.text
    log.debug "Parse: $value"
    Map map = [:]
-
+   
    if (description?.startsWith('catchall:')) {
 		map = parseCatchAllMessage(description)
 	}
@@ -83,15 +95,15 @@ def parse(String description) {
     else if (description?.startsWith('on/off: ')){
     	def resultMap = zigbee.getKnownDescription(description)
    		log.debug "${resultMap}"
-
-        map = parseCustomMessage(description)
+        
+        map = parseCustomMessage(description) 
     }
 
 	log.debug "Parse returned $map"
-    //  send event for heartbeat
+    //  send event for heartbeat    
     def now = new Date()
     sendEvent(name: "lastCheckin", value: now)
-
+    
 	def results = map ? createEvent(map) : null
 	return results;
 }
@@ -100,7 +112,7 @@ private Map parseCatchAllMessage(String description) {
 	Map resultMap = [:]
 	def cluster = zigbee.parse(description)
 	log.debug cluster
-
+    
     if (cluster.clusterId == 0x0006 && cluster.command == 0x01){
     	def onoff = cluster.data[-1]
         if (onoff == 1)
@@ -108,7 +120,7 @@ private Map parseCatchAllMessage(String description) {
         else if (onoff == 0)
             resultMap = createEvent(name: "switch", value: "off")
     }
-
+    
 	return resultMap
 }
 
@@ -118,7 +130,7 @@ private Map parseReportAttributeMessage(String description) {
 		map += [(nameAndValue[0].trim()):nameAndValue[1].trim()]
 	}
 	//log.debug "Desc Map: $descMap"
-
+ 
 	Map resultMap = [:]
 
 	if (descMap.cluster == "0001" && descMap.attrId == "0020") {
@@ -130,6 +142,13 @@ private Map parseReportAttributeMessage(String description) {
     }
     else if (descMap.cluster == "0008" && descMap.attrId == "0000") {
     	resultMap = createEvent(name: "switch", value: "off")
+    }
+    else if (descMap.cluster == "0006") {
+    	if (descMap.endpoint == "03") {
+        	resultMap = createEvent(name: "switch2", value: descMap.value[-1] == "1" ? "on" : "off")
+        } else if (descMap.endpoint == "02") {
+        	resultMap = createEvent(name: "switch", value: descMap.value[-1] == "1" ? "on" : "off")
+        }
     }
 	return resultMap
 }
@@ -177,7 +196,7 @@ private Map parseCustomMessage(String description) {
     	else if (description == 'on/off: 1')
     		result = createEvent(name: "switch", value: "on")
 	}
-
+    
     return result
 }
 
