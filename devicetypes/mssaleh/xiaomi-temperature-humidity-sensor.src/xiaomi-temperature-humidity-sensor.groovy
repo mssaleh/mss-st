@@ -25,7 +25,7 @@
  *
  */
 metadata {
-	definition (name: "Xiaomi Temperature Humidity Sensor", namespace: "mssaleh", author: "a4refillpad") {
+	definition (name: "Xiaomi Temperature Humidity Sensor", namespace: "mssaleh", author: "a4refillpad", mnmn: "SmartThings", vid: "SmartThings-smartthings-Xiaomi_Temperature_Humidity_Sensor", ocfDeviceType: "oic.d.thermostat") {
 		capability "Temperature Measurement"
 		capability "Relative Humidity Measurement"
 		capability "Sensor"
