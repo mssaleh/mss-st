@@ -1542,7 +1542,7 @@ private zwaveEndPointEvent(sourceEndPoint, value) {
         }
 
         // If channel maps to a color, update hue, saturation, and color attributes:
-        if (isColor != null & device.latestValue() != null)
+        if (isColor != null & device.latestValue() != null) {
             def colorMap
             switch (mapping) {
                 case "Red":
