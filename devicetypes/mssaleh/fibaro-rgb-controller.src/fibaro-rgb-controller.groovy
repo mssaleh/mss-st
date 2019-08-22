@@ -309,7 +309,7 @@ metadata {
             "switchRed","levelRedSlider", "levelRedTile",
             "switchGreen","levelGreenSlider", "levelGreenTile",
             "switchBlue","levelBlueSlider", "levelBlueTile",
-            "switchWhite","levelWhiteSlider", "levelWhiteTile",
+            // "switchWhite","levelWhiteSlider", "levelWhiteTile",
 
             // OUT Channels:
             //"switchCh1","levelCh1Slider", "levelCh1Tile",
@@ -344,7 +344,7 @@ metadata {
             input type: "paragraph", element: "paragraph",
                 title: "GENERAL:", description: "General settings."
 
-            input name: "configDebugMode", type: "boolean", defaultValue: false, displayDuringSetup: false,
+            input name: "configDebugMode", type: "boolean", displayDuringSetup: false,
                 title: "Enable debug logging?"
 
         }
@@ -353,19 +353,19 @@ metadata {
             input type: "paragraph", element: "paragraph",
                 title: "AGGREGATE SWITCH/LEVEL:", description: "These settings control how the device's 'switch' and 'level' attributes are calculated."
 
-            input name: "configAggregateSwitchMode", type: "enum", defaultValue: "OUT", required: true, displayDuringSetup: false,
+            input name: "configAggregateSwitchMode", type: "enum", required: true, displayDuringSetup: false,
                 title: "Calaculate Aggregate 'switch' value from:\n[Default: RBGW/OUT Channels Only]",
                 options: ["OUT" : "RBGW/OUT Channels Only",
                           "IN" : "IN Channels Only",
                           "ALL" : "All Channels"]
 
-            input name: "configAggregateLevelMode", type: "enum", defaultValue: "OUT", required: true, displayDuringSetup: false,
+            input name: "configAggregateLevelMode", type: "enum", required: true, displayDuringSetup: false,
                 title: "Calaculate Aggregate 'level' value from:\n[Default: RBGW/OUT Channels Only]",
                 options: ["OUT" : "RBGW/OUT Channels Only",
                           "IN" : "IN Channels Only",
                           "ALL" : "All Channels"]
 
-            input name: "configLevelSetMode", type: "enum", defaultValue: "SCALE", required: true, displayDuringSetup: false,
+            input name: "configLevelSetMode", type: "enum", required: true, displayDuringSetup: false,
                 title: "LEVEL SET Mode:\n[Default: SCALE]",
                 options: ["SCALE" : "SCALE individual channel levels",
                           "SIMPLE" : "SIMPLE: Set all channels to new level"]
@@ -377,7 +377,7 @@ metadata {
                 title: "CHANNEL MAPPING & THRESHOLDS:", description: "Define how the physical channels map to colours.\n" +
                        "Thresholds define the level at which a channel is considered ON, which can be used to translate an analog input to a binary value."
 
-            input name: "configCh1Mapping", type: "enum", defaultValue: "Red", required: true, displayDuringSetup: false,
+            input name: "configCh1Mapping", type: "enum", required: true, displayDuringSetup: false,
                 title: "Channel #1: Maps to:",
                 options: ["Red" : "Red",
                           "Green" : "Green",
@@ -386,10 +386,10 @@ metadata {
                           "Other" : "Other",
                           "Input" : "Input"]
 
-            input name: "configCh1Threshold", type: "number", range: "0..100", defaultValue: "1", required: true, displayDuringSetup: false,
+            input name: "configCh1Threshold", type: "number", range: "0..100", required: true, displayDuringSetup: false,
                 title: "Channel #1: Threshold for ON (%):"
 
-            input name: "configCh2Mapping", type: "enum", defaultValue: "Green", required: true, displayDuringSetup: false,
+            input name: "configCh2Mapping", type: "enum", required: true, displayDuringSetup: false,
                 title: "Channel #2: Maps to:",
                 options: ["Red" : "Red",
                           "Green" : "Green",
@@ -398,10 +398,10 @@ metadata {
                           "Other" : "Other",
                           "Input" : "Input"]
 
-            input name: "configCh2Threshold", type: "number", range: "0..100", defaultValue: "1", required: true, displayDuringSetup: false,
+            input name: "configCh2Threshold", type: "number", range: "0..100", required: true, displayDuringSetup: false,
                 title: "Channel #2: Threshold for ON (%):"
 
-            input name: "configCh3Mapping", type: "enum", defaultValue: "Blue", required: true, displayDuringSetup: false,
+            input name: "configCh3Mapping", type: "enum", required: true, displayDuringSetup: false,
                 title: "Channel #3: Maps to:",
                 options: ["Red" : "Red",
                           "Green" : "Green",
@@ -410,10 +410,10 @@ metadata {
                           "Other" : "Other",
                           "Input" : "Input"]
 
-            input name: "configCh3Threshold", type: "number", range: "0..100", defaultValue: "1", required: true, displayDuringSetup: false,
+            input name: "configCh3Threshold", type: "number", range: "0..100", required: true, displayDuringSetup: false,
                 title: "Channel #3: Threshold for ON (%):"
 
-            input name: "configCh4Mapping", type: "enum", defaultValue: "White", required: true, displayDuringSetup: false,
+            input name: "configCh4Mapping", type: "enum", required: true, displayDuringSetup: false,
                 title: "Channel #4: Maps to:",
                 options: ["Red" : "Red",
                           "Green" : "Green",
@@ -422,7 +422,7 @@ metadata {
                           "Other" : "Other",
                           "Input" : "Input"]
 
-            input name: "configCh4Threshold", type: "number", range: "0..100", defaultValue: "1", required: true, displayDuringSetup: false,
+            input name: "configCh4Threshold", type: "number", range: "0..100", required: true, displayDuringSetup: false,
                 title: "Channel #4: Threshold for ON (%):"
 
         }
@@ -431,14 +431,14 @@ metadata {
             input type: "paragraph", element: "paragraph",
                 title: "PHYSICAL DEVICE PARAMETERS:", description: "Refer to the Fibaro manual for a full description of the device parameters."
 
-            input name: "configParam01", type: "enum", defaultValue: "255", required: true, displayDuringSetup: false,
+            input name: "configParam01", type: "enum", required: true, displayDuringSetup: false,
                 title: "#1: ALL ON/ALL OFF function:\n[Default: 255]",
                 options: ["0" : "0: ALL ON inactive, ALL OFF inactive",
                           "1" : "1: ALL ON inactive, ALL OFF active",
                           "2" : "2: ALL ON active, ALL OFF inactive",
                           "255" : "255: ALL ON active, ALL OFF active"]
 
-            input name: "configParam06", type: "enum", defaultValue: "0", required: true, displayDuringSetup: false,
+            input name: "configParam06", type: "enum", required: true, displayDuringSetup: false,
                 title: "#6: Associations command class:\n[Default: 0]",
                 options: ["0" : "0: NORMAL (DIMMER) - BASIC SET/SWITCH_MULTILEVEL_START/STOP",
                           "1" : "1: NORMAL (RGBW) - COLOR_CONTROL_SET/START/STOP_STATE_CHANGE",
@@ -446,19 +446,19 @@ metadata {
                           "3" : "3: BRIGHTNESS - BASIC SET/SWITCH_MULTILEVEL_START/STOP",
                           "4" : "4: RAINBOW (RGBW) - COLOR_CONTROL_SET"]
 
-            input name: "configParam08", type: "enum", defaultValue: "0", required: true, displayDuringSetup: false,
+            input name: "configParam08", type: "enum", required: true, displayDuringSetup: false,
                 title: "#8: IN/OUT: Outputs state change mode:\n[Default: 0: MODE1]",
                 options: ["0" : "0: MODE1",
                           "1" : "1: MODE2"]
 
-            input name: "configParam09", type: "number", range: "1..255", defaultValue: "1", required: true, displayDuringSetup: false,
+            input name: "configParam09", type: "number", range: "1..255", required: true, displayDuringSetup: false,
                 title: "#9: MODE1: Step value:\n[Default: 1]"
 
-            input name: "configParam10", type: "number", range: "0..60000", defaultValue: "10", required: true, displayDuringSetup: false,
+            input name: "configParam10", type: "number", range: "0..60000", required: true, displayDuringSetup: false,
                 title: "#10: MODE1: Time between steps:\n[Default: 10ms]\n" +
                        " - 0: immediate change"
 
-            input name: "configParam11", type: "number", range: "0..255", defaultValue: "67", required: true, displayDuringSetup: false,
+            input name: "configParam11", type: "number", range: "0..255", required: true, displayDuringSetup: false,
                 title: "#11: MODE2: Time for changing from start to end value:\n" +
                        "[Default: 67 = 3s]\n" +
                        " - 0: immediate change\n" +
@@ -467,16 +467,16 @@ metadata {
                        " - 129-191: 10-630[s] [value-128]*10s\n" +
                        " - 193-255: 1-63[min] [value-192]*1min"
 
-            input name: "configParam12", type: "number", range: "3..255", defaultValue: "255", required: true, displayDuringSetup: false,
+            input name: "configParam12", type: "number", range: "3..255", required: true, displayDuringSetup: false,
                 title: "#12: Maximum brightening level:\n[Default: 255]"
 
-            input name: "configParam13", type: "number", range: "0..254", defaultValue: "2", required: true, displayDuringSetup: false,
+            input name: "configParam13", type: "number", range: "0..254", required: true, displayDuringSetup: false,
                 title: "#13: Minimum dim level:\n[Default: 2]"
 
             input type: "paragraph", element: "paragraph",
                 title: "#14: IN/OUT Channel settings: ", description: "If RGBW mode is chosen, settings for all 4 channels must be identical."
 
-            input name: "configParam14_1", type: "enum", defaultValue: "1", required: true, displayDuringSetup: false,
+            input name: "configParam14_1", type: "enum", required: true, displayDuringSetup: false,
                 title: "CHANNEL 1:\n[Default: 1: RGBW - MOMENTARY (NORMAL MODE)]",
                 options: ["1" : "1: RGBW - MOMENTARY (NORMAL MODE)",
                           "2" : "2: RGBW - MOMENTARY (BRIGHTNESS MODE)",
@@ -490,7 +490,7 @@ metadata {
                           "12" : "12: OUT - TOGGLE (NORMAL MODE)",
                           "14" : "14: OUT - TOGGLE W. MEMORY (NORMAL MODE)"]
 
-            input name: "configParam14_2", type: "enum", defaultValue: "1", required: true, displayDuringSetup: false,
+            input name: "configParam14_2", type: "enum", required: true, displayDuringSetup: false,
                 title: "CHANNEL 2:\n[Default: 1: RGBW - MOMENTARY (NORMAL MODE)]",
                 options: ["1" : "1: RGBW - MOMENTARY (NORMAL MODE)",
                           "2" : "2: RGBW - MOMENTARY (BRIGHTNESS MODE)",
@@ -504,7 +504,7 @@ metadata {
                           "12" : "12: OUT - TOGGLE (NORMAL MODE)",
                           "14" : "14: OUT - TOGGLE W. MEMORY (NORMAL MODE)"]
 
-            input name: "configParam14_3", type: "enum", defaultValue: "1", required: true, displayDuringSetup: false,
+            input name: "configParam14_3", type: "enum", required: true, displayDuringSetup: false,
                 title: "CHANNEL 3:\n[Default: 1: RGBW - MOMENTARY (NORMAL MODE)]",
                 options: ["1" : "1: RGBW - MOMENTARY (NORMAL MODE)",
                           "2" : "2: RGBW - MOMENTARY (BRIGHTNESS MODE)",
@@ -518,7 +518,7 @@ metadata {
                           "12" : "12: OUT - TOGGLE (NORMAL MODE)",
                           "14" : "14: OUT - TOGGLE W. MEMORY (NORMAL MODE)"]
 
-            input name: "configParam14_4", type: "enum", defaultValue: "1", required: true, displayDuringSetup: false,
+            input name: "configParam14_4", type: "enum", required: true, displayDuringSetup: false,
                 title: "CHANNEL 4:\n[Default: 1: RGBW - MOMENTARY (NORMAL MODE)]",
                 options: ["1" : "1: RGBW - MOMENTARY (NORMAL MODE)",
                           "2" : "2: RGBW - MOMENTARY (BRIGHTNESS MODE)",
@@ -532,53 +532,53 @@ metadata {
                           "12" : "12: OUT - TOGGLE (NORMAL MODE)",
                           "14" : "14: OUT - TOGGLE W. MEMORY (NORMAL MODE)"]
 
-            input name: "configParam16", type: "enum", defaultValue: "1", required: true, displayDuringSetup: false,
+            input name: "configParam16", type: "enum", required: true, displayDuringSetup: false,
                 title: "#16: Memorise device status at power cut:\n[Default: 1: MEMORISE STATUS]",
                 options: ["0" : "0: DO NOT MEMORISE STATUS",
                           "1" : "1: MEMORISE STATUS"]
 
-            input name: "configParam30", type: "enum", defaultValue: "0", required: true, displayDuringSetup: false,
+            input name: "configParam30", type: "enum", required: true, displayDuringSetup: false,
                 title: "#30: Response to ALARM of any type:\n[Default: 0: INACTIVE]",
                 options: ["0" : "0: INACTIVE - Device doesn't respond",
                           "1" : "1: ALARM ON - Device turns on when alarm is detected",
                           "2" : "2: ALARM OFF - Device turns off when alarm is detected",
                           "3" : "3: ALARM PROGRAM - Alarm sequence turns on (Parameter #38)"]
 
-            input name: "configParam38", type: "number", range: "1..10", defaultValue: "10", required: true, displayDuringSetup: false,
+            input name: "configParam38", type: "number", range: "1..10", required: true, displayDuringSetup: false,
                 title: "#38: Alarm sequence program:\n[Default: 10]"
 
-            input name: "configParam39", type: "number", range: "1..65534", defaultValue: "600", required: true, displayDuringSetup: false,
+            input name: "configParam39", type: "number", range: "1..65534", required: true, displayDuringSetup: false,
                 title: "#39: Active PROGRAM alarm time:\n[Default: 600s]"
 
-            input name: "configParam42", type: "enum", defaultValue: "0", required: true, displayDuringSetup: false,
+            input name: "configParam42", type: "enum", required: true, displayDuringSetup: false,
                 title: "#42: Command class reporting outputs status change:\n[Default: 0]",
                 options: ["0" : "0: Reporting as a result of inputs and controllers actions (SWITCHMULTILEVEL)",
                           "1" : "1: Reporting as a result of input actions (SWITCH MULTILEVEL)",
                           "2" : "2: Reporting as a result of input actions (COLOR CONTROL)"]
 
-            input name: "configParam43", type: "number", range: "1..100", defaultValue: "5", required: true, displayDuringSetup: false,
+            input name: "configParam43", type: "number", range: "1..100", required: true, displayDuringSetup: false,
                 title: "#43: Reporting 0-10v analog inputs change threshold:\n[Default: 5 = 0.5V]"
 
-            input name: "configParam44", type: "number", range: "0..65534", defaultValue: "30", required: true, displayDuringSetup: false,
+            input name: "configParam44", type: "number", range: "0..65534", required: true, displayDuringSetup: false,
                 title: "#44: Power load reporting frequency:\n[Default: 30s]\n" +
                        " - 0: reports are not sent\n" +
                        " - 1-65534: time between reports (s)"
 
-            input name: "configParam45", type: "number", range: "0..254", defaultValue: "10", required: true, displayDuringSetup: false,
+            input name: "configParam45", type: "number", range: "0..254", required: true, displayDuringSetup: false,
                 title: "#45: Reporting changes in energy:\n[Default: 10 = 0.1kWh]\n" +
                        " - 0: reports are not sent\n" +
                        " - 1-254: 0.01kWh - 2.54kWh"
 
-            input name: "configParam71", type: "enum", defaultValue: "1", required: true, displayDuringSetup: false,
+            input name: "configParam71", type: "enum", required: true, displayDuringSetup: false,
                 title: "#71: Response to BRIGHTNESS set to 0%:\n[Default: 1]",
                 options: ["0" : "0: Illumination colour set to white",
                           "1" : "1: Last set colour is memorised"]
 
-            input name: "configParam72", type: "number", range: "1..10", defaultValue: "1", required: true, displayDuringSetup: false,
+            input name: "configParam72", type: "number", range: "1..10", required: true, displayDuringSetup: false,
                 title: "#72: Start predefined (RGBW) program:\n[Default: 1]\n" +
                        " - 1-10: animation program number"
 
-            input name: "configParam73", type: "enum", defaultValue: "0", required: true, displayDuringSetup: false,
+            input name: "configParam73", type: "enum", required: true, displayDuringSetup: false,
                 title: "#73: Triple click action:\n[Default: 0]",
                 options: ["0" : "0: NODE INFO control frame is sent",
                           "1" : "1: Start favourite program"]
@@ -591,16 +591,16 @@ metadata {
                     "Node IDs must be in decimal format (E.g.: 27,155, ... ).\n" +
                     "Each group allows a maximum of five devices.\n"
 
-            input name: "configAssocGroup01", type: "text", defaultValue: "", displayDuringSetup: false,
+            input name: "configAssocGroup01", type: "text", displayDuringSetup: false,
                 title: "Association Group #1:"
 
-            input name: "configAssocGroup02", type: "text", defaultValue: "", displayDuringSetup: false,
+            input name: "configAssocGroup02", type: "text", displayDuringSetup: false,
                 title: "Association Group #2:"
 
-            input name: "configAssocGroup03", type: "text", defaultValue: "", displayDuringSetup: false,
+            input name: "configAssocGroup03", type: "text", displayDuringSetup: false,
                 title: "Association Group #3:"
 
-            input name: "configAssocGroup04", type: "text", defaultValue: "", displayDuringSetup: false,
+            input name: "configAssocGroup04", type: "text", displayDuringSetup: false,
                 title: "Association Group #4:"
 
         }
@@ -1542,7 +1542,7 @@ private zwaveEndPointEvent(sourceEndPoint, value) {
         }
 
         // If channel maps to a color, update hue, saturation, and color attributes:
-        if (isColor) {
+        if (isColor != null & device.latestValue() != null)
             def colorMap
             switch (mapping) {
                 case "Red":
